@@ -1,0 +1,1576 @@
+Online Store (Mini E-Commerce)
+mysql> use 10k;
+Database changed
+mysql> CREATE TABLE Customers (
+    -> customer_id INT PRIMARY KEY,
+    -> name VARCHAR(100) NOT NULL,
+    -> email VARCHAR(100) UNIQUE,
+    -> phone VARCHAR(15),
+    -> city VARCHAR(255),
+    -> registration_date DATE
+    -> );
+Query OK, 0 rows affected (0.05 sec)
+
+mysql>
+mysql> CREATE TABLE Categories (
+    -> category_id INT PRIMARY KEY,
+    -> category_name VARCHAR(100) NOT NULL,
+    -> description VARCHAR(255)
+    -> );
+Query OK, 0 rows affected (0.01 sec)
+
+mysql>
+mysql> CREATE TABLE Products (
+    -> product_id INT PRIMARY KEY,
+    -> product_name VARCHAR(100) NOT NULL,
+    -> price DECIMAL(10,2),
+    -> stock_quantity INT,
+    -> category_id INT,
+    -> added_date DATE,
+    -> FOREIGN KEY (category_id) REFERENCES Categories(category_id)
+    -> );
+Query OK, 0 rows affected (0.03 sec)
+
+mysql> CREATE TABLE Orders (
+    -> order_id INT PRIMARY KEY,
+    -> customer_id INT,
+    -> order_date DATE,
+    -> total_amount DECIMAL(10,2),
+    -> status VARCHAR(20),
+    -> FOREIGN KEY (customer_id) REFERENCES Customers(customer_id)
+    -> );
+Query OK, 0 rows affected (0.03 sec)
+
+mysql> CREATE TABLE Order_Items (
+    -> order_item_id INT PRIMARY KEY,
+    -> order_id INT,
+    -> product_id INT,
+    -> quantity INT,
+    -> price DECIMAL(10,2),
+    -> subtotal DECIMAL(10,2),
+    -> FOREIGN KEY (order_id) REFERENCES Orders(order_id),
+    -> FOREIGN KEY (product_id) REFERENCES Products(product_id)
+    -> );
+Query OK, 0 rows affected (0.04 sec)
+
+mysql>
+mysql> INSERT INTO Categories
+    -> (category_id, category_name, description)
+    -> VALUES
+    -> (1, 'Electronics', 'Electronic devices and accessories'),
+    -> (2, 'Clothing', 'Men and women clothing'),
+    -> (3, 'Home Appliances', 'Appliances for home use'),
+    -> (4, 'Books', 'Books and study materials'),
+    -> (5, 'Sports', 'Sports equipment and accessories');
+Query OK, 5 rows affected (0.00 sec)
+Records: 5  Duplicates: 0  Warnings: 0
+
+mysql> INSERT INTO Customers
+    -> (customer_id, name, email, phone, city, registration_date)
+    -> VALUES
+    -> (1, 'Nandu', 'nandu@gmail.com', '9876543210', 'Hyderabad', '2024-01-15'),
+    -> (2, 'Rahul', 'rahul@gmail.com', '9876543211', 'Bangalore', '2024-02-10'),
+    -> (3, 'Priya', 'priya@gmail.com', '9876543212', 'Hyderabad', '2024-03-05'),
+    -> (4, 'Arjun', 'arjun@gmail.com', '9876543213', 'Chennai', '2024-04-12'),
+    -> (5, 'Sneha', 'sneha@gmail.com', '9876543214', 'Mumbai', '2024-05-20'),
+    -> (6, 'Kiran', 'kiran@gmail.com', '9876543215', 'Hyderabad', '2024-06-18'),
+    -> (7, 'Anjali', 'anjali@gmail.com', '9876543216', 'Pune', '2024-07-25'),
+    -> (8, 'Vijay', 'vijay@gmail.com', '9876543217', 'Delhi', '2024-08-14'),
+    -> (9, 'Ravi', 'ravi@gmail.com', '9876543218', 'Hyderabad', '2024-09-10'),
+    -> (10, 'Divya', 'divya@gmail.com', '9876543219', 'Bangalore', '2024-10-05');
+Query OK, 10 rows affected (0.01 sec)
+Records: 10  Duplicates: 0  Warnings: 0
+
+mysql> INSERT INTO Products
+    -> (product_id, product_name, price, stock_quantity, category_id, added_date)
+    -> VALUES
+    -> (101, 'Laptop', 65000.00, 20, 1, '2024-01-10'),
+    -> (102, 'Smartphone', 25000.00, 35, 1, '2024-02-15'),
+    -> (103, 'Headphones', 1500.00, 50, 1, '2024-03-20'),
+    -> (104, 'Smart Watch', 3500.00, 40, 1, '2025-01-12'),
+    -> (105, 'T-Shirt', 799.00, 100, 2, '2024-04-05'),
+    -> (106, 'Jeans', 1499.00, 60, 2, '2024-05-15'),
+    -> (107, 'Jacket', 2999.00, 30, 2, '2025-02-10'),
+    -> (108, 'Microwave Oven', 12000.00, 15, 3, '2024-06-01'),
+    -> (109, 'Mixer Grinder', 4500.00, 25, 3, '2024-07-10'),
+    -> (110, 'Air Fryer', 6500.00, 18, 3, '2025-03-05'),
+    -> (111, 'Python Programming', 899.00, 50, 4, '2024-08-12'),
+    -> (112, 'SQL Guide', 699.00, 45, 4, '2024-09-18'),
+    -> (113, 'Cricket Bat', 3500.00, 20, 5, '2024-10-10'),
+    -> (114, 'Football', 1200.00, 35, 5, '2025-01-20'),
+    -> (115, 'Gym Dumbbells', 2500.00, 25, 5, '2025-02-25');
+Query OK, 15 rows affected (0.01 sec)
+Records: 15  Duplicates: 0  Warnings: 0
+
+mysql> INSERT INTO Orders
+    -> (order_id, customer_id, order_date, total_amount, status)
+    -> VALUES
+    -> (1001, 1, '2025-01-05', 66500.00, 'Delivered'),
+    -> (1002, 2, '2025-01-12', 25000.00, 'Delivered'),
+    -> (1003, 3, '2025-01-20', 4999.00, 'Shipped'),
+    -> (1004, 1, '2025-02-05', 1500.00, 'Delivered'),
+    -> (1005, 4, '2025-02-15', 12000.00, 'Cancelled'),
+    -> (1006, 5, '2025-02-20', 799.00, 'Delivered'),
+    -> (1007, 6, '2025-03-01', 4500.00, 'Delivered'),
+    -> (1008, 3, '2025-03-10', 6500.00, 'Shipped'),
+    -> (1009, 7, '2025-03-15', 3500.00, 'Delivered'),
+    -> (1010, 8, '2025-04-02', 1499.00, 'Delivered'),
+    -> (1011, 9, '2025-04-10', 899.00, 'Delivered'),
+    -> (1012, 10, '2025-04-18', 3700.00, 'Shipped'),
+    -> (1013, 2, '2025-05-05', 27000.00, 'Delivered'),
+    -> (1014, 5, '2025-05-15', 2500.00, 'Pending'),
+    -> (1015, 1, '2025-06-01', 7700.00, 'Delivered');
+Query OK, 15 rows affected (0.01 sec)
+Records: 15  Duplicates: 0  Warnings: 0
+
+mysql> INSERT INTO Order_Items
+    -> (order_item_id, order_id, product_id, quantity, price, subtotal)
+    -> VALUES
+    -> (1, 1001, 101, 1, 65000.00, 65000.00),
+    -> (2, 1001, 103, 1, 1500.00, 1500.00),
+    ->
+    -> (3, 1002, 102, 1, 25000.00, 25000.00),
+    ->
+    -> (4, 1003, 106, 1, 1499.00, 1499.00),
+    -> (5, 1003, 107, 1, 2999.00, 2999.00),
+    -> (6, 1003, 105, 1, 501.00, 501.00),
+    ->
+    -> (7, 1004, 103, 1, 1500.00, 1500.00),
+    ->
+    -> (8, 1005, 108, 1, 12000.00, 12000.00),
+    ->
+    -> (9, 1006, 105, 1, 799.00, 799.00),
+    ->
+    -> (10, 1007, 109, 1, 4500.00, 4500.00),
+    ->
+    -> (11, 1008, 110, 1, 6500.00, 6500.00),
+    ->
+    -> (12, 1009, 113, 1, 3500.00, 3500.00),
+    ->
+    -> (13, 1010, 106, 1, 1499.00, 1499.00),
+    ->
+    -> (14, 1011, 111, 1, 899.00, 899.00),
+    ->
+    -> (15, 1012, 113, 1, 3500.00, 3500.00),
+    -> (16, 1012, 114, 1, 1200.00, 1200.00),
+    ->
+    -> (17, 1013, 102, 1, 25000.00, 25000.00),
+    -> (18, 1013, 103, 1, 1500.00, 1500.00),
+    -> (19, 1013, 105, 1, 500.00, 500.00),
+    ->
+    -> (20, 1014, 115, 1, 2500.00, 2500.00),
+    ->
+    -> (21, 1015, 104, 1, 3500.00, 3500.00),
+    -> (22, 1015, 113, 1, 3500.00, 3500.00),
+    -> (23, 1015, 114, 1, 700.00, 700.00),
+    -> (24, 1015, 111, 1, 0.00, 0.00),
+    -> (25, 1015, 112, 1, 0.00, 0.00);
+Query OK, 25 rows affected (0.01 sec)
+Records: 25  Duplicates: 0  Warnings: 0
+
+mysql> select * from customers;select * from categories;select * from Products;select * from Orders;select * from Order_Items;
++-------------+--------+------------------+------------+-----------+-------------------+
+| customer_id | name   | email            | phone      | city      | registration_date |
++-------------+--------+------------------+------------+-----------+-------------------+
+|           1 | Nandu  | nandu@gmail.com  | 9876543210 | Hyderabad | 2024-01-15        |
+|           2 | Rahul  | rahul@gmail.com  | 9876543211 | Bangalore | 2024-02-10        |
+|           3 | Priya  | priya@gmail.com  | 9876543212 | Hyderabad | 2024-03-05        |
+|           4 | Arjun  | arjun@gmail.com  | 9876543213 | Chennai   | 2024-04-12        |
+|           5 | Sneha  | sneha@gmail.com  | 9876543214 | Mumbai    | 2024-05-20        |
+|           6 | Kiran  | kiran@gmail.com  | 9876543215 | Hyderabad | 2024-06-18        |
+|           7 | Anjali | anjali@gmail.com | 9876543216 | Pune      | 2024-07-25        |
+|           8 | Vijay  | vijay@gmail.com  | 9876543217 | Delhi     | 2024-08-14        |
+|           9 | Ravi   | ravi@gmail.com   | 9876543218 | Hyderabad | 2024-09-10        |
+|          10 | Divya  | divya@gmail.com  | 9876543219 | Bangalore | 2024-10-05        |
++-------------+--------+------------------+------------+-----------+-------------------+
+10 rows in set (0.00 sec)
+
++-------------+-----------------+------------------------------------+
+| category_id | category_name   | description                        |
++-------------+-----------------+------------------------------------+
+|           1 | Electronics     | Electronic devices and accessories |
+|           2 | Clothing        | Men and women clothing             |
+|           3 | Home Appliances | Appliances for home use            |
+|           4 | Books           | Books and study materials          |
+|           5 | Sports          | Sports equipment and accessories   |
++-------------+-----------------+------------------------------------+
+5 rows in set (0.00 sec)
+
++------------+--------------------+----------+----------------+-------------+------------+
+| product_id | product_name       | price    | stock_quantity | category_id | added_date |
++------------+--------------------+----------+----------------+-------------+------------+
+|        101 | Laptop             | 65000.00 |             20 |           1 | 2024-01-10 |
+|        102 | Smartphone         | 25000.00 |             35 |           1 | 2024-02-15 |
+|        103 | Headphones         |  1500.00 |             50 |           1 | 2024-03-20 |
+|        104 | Smart Watch        |  3500.00 |             40 |           1 | 2025-01-12 |
+|        105 | T-Shirt            |   799.00 |            100 |           2 | 2024-04-05 |
+|        106 | Jeans              |  1499.00 |             60 |           2 | 2024-05-15 |
+|        107 | Jacket             |  2999.00 |             30 |           2 | 2025-02-10 |
+|        108 | Microwave Oven     | 12000.00 |             15 |           3 | 2024-06-01 |
+|        109 | Mixer Grinder      |  4500.00 |             25 |           3 | 2024-07-10 |
+|        110 | Air Fryer          |  6500.00 |             18 |           3 | 2025-03-05 |
+|        111 | Python Programming |   899.00 |             50 |           4 | 2024-08-12 |
+|        112 | SQL Guide          |   699.00 |             45 |           4 | 2024-09-18 |
+|        113 | Cricket Bat        |  3500.00 |             20 |           5 | 2024-10-10 |
+|        114 | Football           |  1200.00 |             35 |           5 | 2025-01-20 |
+|        115 | Gym Dumbbells      |  2500.00 |             25 |           5 | 2025-02-25 |
++------------+--------------------+----------+----------------+-------------+------------+
+15 rows in set (0.00 sec)
+
++----------+-------------+------------+--------------+-----------+
+| order_id | customer_id | order_date | total_amount | status    |
++----------+-------------+------------+--------------+-----------+
+|     1001 |           1 | 2025-01-05 |     66500.00 | Delivered |
+|     1002 |           2 | 2025-01-12 |     25000.00 | Delivered |
+|     1003 |           3 | 2025-01-20 |      4999.00 | Shipped   |
+|     1004 |           1 | 2025-02-05 |      1500.00 | Delivered |
+|     1005 |           4 | 2025-02-15 |     12000.00 | Cancelled |
+|     1006 |           5 | 2025-02-20 |       799.00 | Delivered |
+|     1007 |           6 | 2025-03-01 |      4500.00 | Delivered |
+|     1008 |           3 | 2025-03-10 |      6500.00 | Shipped   |
+|     1009 |           7 | 2025-03-15 |      3500.00 | Delivered |
+|     1010 |           8 | 2025-04-02 |      1499.00 | Delivered |
+|     1011 |           9 | 2025-04-10 |       899.00 | Delivered |
+|     1012 |          10 | 2025-04-18 |      3700.00 | Shipped   |
+|     1013 |           2 | 2025-05-05 |     27000.00 | Delivered |
+|     1014 |           5 | 2025-05-15 |      2500.00 | Pending   |
+|     1015 |           1 | 2025-06-01 |      7700.00 | Delivered |
++----------+-------------+------------+--------------+-----------+
+15 rows in set (0.00 sec)
+
++---------------+----------+------------+----------+----------+----------+
+| order_item_id | order_id | product_id | quantity | price    | subtotal |
++---------------+----------+------------+----------+----------+----------+
+|             1 |     1001 |        101 |        1 | 65000.00 | 65000.00 |
+|             2 |     1001 |        103 |        1 |  1500.00 |  1500.00 |
+|             3 |     1002 |        102 |        1 | 25000.00 | 25000.00 |
+|             4 |     1003 |        106 |        1 |  1499.00 |  1499.00 |
+|             5 |     1003 |        107 |        1 |  2999.00 |  2999.00 |
+|             6 |     1003 |        105 |        1 |   501.00 |   501.00 |
+|             7 |     1004 |        103 |        1 |  1500.00 |  1500.00 |
+|             8 |     1005 |        108 |        1 | 12000.00 | 12000.00 |
+|             9 |     1006 |        105 |        1 |   799.00 |   799.00 |
+|            10 |     1007 |        109 |        1 |  4500.00 |  4500.00 |
+|            11 |     1008 |        110 |        1 |  6500.00 |  6500.00 |
+|            12 |     1009 |        113 |        1 |  3500.00 |  3500.00 |
+|            13 |     1010 |        106 |        1 |  1499.00 |  1499.00 |
+|            14 |     1011 |        111 |        1 |   899.00 |   899.00 |
+|            15 |     1012 |        113 |        1 |  3500.00 |  3500.00 |
+|            16 |     1012 |        114 |        1 |  1200.00 |  1200.00 |
+|            17 |     1013 |        102 |        1 | 25000.00 | 25000.00 |
+|            18 |     1013 |        103 |        1 |  1500.00 |  1500.00 |
+|            19 |     1013 |        105 |        1 |   500.00 |   500.00 |
+|            20 |     1014 |        115 |        1 |  2500.00 |  2500.00 |
+|            21 |     1015 |        104 |        1 |  3500.00 |  3500.00 |
+|            22 |     1015 |        113 |        1 |  3500.00 |  3500.00 |
+|            23 |     1015 |        114 |        1 |   700.00 |   700.00 |
+|            24 |     1015 |        111 |        1 |     0.00 |     0.00 |
+|            25 |     1015 |        112 |        1 |     0.00 |     0.00 |
++---------------+----------+------------+----------+----------+----------+
+25 rows in set (0.00 sec)
+
+mysql> select * from Products where Price>1000;
++------------+----------------+----------+----------------+-------------+------------+
+| product_id | product_name   | price    | stock_quantity | category_id | added_date |
++------------+----------------+----------+----------------+-------------+------------+
+|        101 | Laptop         | 65000.00 |             20 |           1 | 2024-01-10 |
+|        102 | Smartphone     | 25000.00 |             35 |           1 | 2024-02-15 |
+|        103 | Headphones     |  1500.00 |             50 |           1 | 2024-03-20 |
+|        104 | Smart Watch    |  3500.00 |             40 |           1 | 2025-01-12 |
+|        106 | Jeans          |  1499.00 |             60 |           2 | 2024-05-15 |
+|        107 | Jacket         |  2999.00 |             30 |           2 | 2025-02-10 |
+|        108 | Microwave Oven | 12000.00 |             15 |           3 | 2024-06-01 |
+|        109 | Mixer Grinder  |  4500.00 |             25 |           3 | 2024-07-10 |
+|        110 | Air Fryer      |  6500.00 |             18 |           3 | 2025-03-05 |
+|        113 | Cricket Bat    |  3500.00 |             20 |           5 | 2024-10-10 |
+|        114 | Football       |  1200.00 |             35 |           5 | 2025-01-20 |
+|        115 | Gym Dumbbells  |  2500.00 |             25 |           5 | 2025-02-25 |
++------------+----------------+----------+----------------+-------------+------------+
+12 rows in set (0.01 sec)
+
+mysql> select * from Customers where city='Hyderabad;
+    '> ^C
+mysql> select * from Customers where city='Hyderabad';
++-------------+-------+-----------------+------------+-----------+-------------------+
+| customer_id | name  | email           | phone      | city      | registration_date |
++-------------+-------+-----------------+------------+-----------+-------------------+
+|           1 | Nandu | nandu@gmail.com | 9876543210 | Hyderabad | 2024-01-15        |
+|           3 | Priya | priya@gmail.com | 9876543212 | Hyderabad | 2024-03-05        |
+|           6 | Kiran | kiran@gmail.com | 9876543215 | Hyderabad | 2024-06-18        |
+|           9 | Ravi  | ravi@gmail.com  | 9876543218 | Hyderabad | 2024-09-10        |
++-------------+-------+-----------------+------------+-----------+-------------------+
+4 rows in set (0.00 sec)
+
+mysql> select * from products where category_id=1;
++------------+--------------+----------+----------------+-------------+------------+
+| product_id | product_name | price    | stock_quantity | category_id | added_date |
++------------+--------------+----------+----------------+-------------+------------+
+|        101 | Laptop       | 65000.00 |             20 |           1 | 2024-01-10 |
+|        102 | Smartphone   | 25000.00 |             35 |           1 | 2024-02-15 |
+|        103 | Headphones   |  1500.00 |             50 |           1 | 2024-03-20 |
+|        104 | Smart Watch  |  3500.00 |             40 |           1 | 2025-01-12 |
++------------+--------------+----------+----------------+-------------+------------+
+4 rows in set (0.00 sec)
+
+mysql> select * from products where added_date>'2024-12-31';
++------------+---------------+---------+----------------+-------------+------------+
+| product_id | product_name  | price   | stock_quantity | category_id | added_date |
++------------+---------------+---------+----------------+-------------+------------+
+|        104 | Smart Watch   | 3500.00 |             40 |           1 | 2025-01-12 |
+|        107 | Jacket        | 2999.00 |             30 |           2 | 2025-02-10 |
+|        110 | Air Fryer     | 6500.00 |             18 |           3 | 2025-03-05 |
+|        114 | Football      | 1200.00 |             35 |           5 | 2025-01-20 |
+|        115 | Gym Dumbbells | 2500.00 |             25 |           5 | 2025-02-25 |
++------------+---------------+---------+----------------+-------------+------------+
+5 rows in set (0.01 sec)
+
+mysql> select * from customers c inner join orders o on c.customer_id=o.customer_id;
++-------------+--------+------------------+------------+-----------+-------------------+----------+-------------+------------+--------------+-----------+
+| customer_id | name   | email            | phone      | city      | registration_date | order_id | customer_id | order_date | total_amount | status    |
++-------------+--------+------------------+------------+-----------+-------------------+----------+-------------+------------+--------------+-----------+
+|           1 | Nandu  | nandu@gmail.com  | 9876543210 | Hyderabad | 2024-01-15        |     1001 |           1 | 2025-01-05 |     66500.00 | Delivered |
+|           1 | Nandu  | nandu@gmail.com  | 9876543210 | Hyderabad | 2024-01-15        |     1004 |           1 | 2025-02-05 |      1500.00 | Delivered |
+|           1 | Nandu  | nandu@gmail.com  | 9876543210 | Hyderabad | 2024-01-15        |     1015 |           1 | 2025-06-01 |      7700.00 | Delivered |
+|           2 | Rahul  | rahul@gmail.com  | 9876543211 | Bangalore | 2024-02-10        |     1002 |           2 | 2025-01-12 |     25000.00 | Delivered |
+|           2 | Rahul  | rahul@gmail.com  | 9876543211 | Bangalore | 2024-02-10        |     1013 |           2 | 2025-05-05 |     27000.00 | Delivered |
+|           3 | Priya  | priya@gmail.com  | 9876543212 | Hyderabad | 2024-03-05        |     1003 |           3 | 2025-01-20 |      4999.00 | Shipped   |
+|           3 | Priya  | priya@gmail.com  | 9876543212 | Hyderabad | 2024-03-05        |     1008 |           3 | 2025-03-10 |      6500.00 | Shipped   |
+|           4 | Arjun  | arjun@gmail.com  | 9876543213 | Chennai   | 2024-04-12        |     1005 |           4 | 2025-02-15 |     12000.00 | Cancelled |
+|           5 | Sneha  | sneha@gmail.com  | 9876543214 | Mumbai    | 2024-05-20        |     1006 |           5 | 2025-02-20 |       799.00 | Delivered |
+|           5 | Sneha  | sneha@gmail.com  | 9876543214 | Mumbai    | 2024-05-20        |     1014 |           5 | 2025-05-15 |      2500.00 | Pending   |
+|           6 | Kiran  | kiran@gmail.com  | 9876543215 | Hyderabad | 2024-06-18        |     1007 |           6 | 2025-03-01 |      4500.00 | Delivered |
+|           7 | Anjali | anjali@gmail.com | 9876543216 | Pune      | 2024-07-25        |     1009 |           7 | 2025-03-15 |      3500.00 | Delivered |
+|           8 | Vijay  | vijay@gmail.com  | 9876543217 | Delhi     | 2024-08-14        |     1010 |           8 | 2025-04-02 |      1499.00 | Delivered |
+|           9 | Ravi   | ravi@gmail.com   | 9876543218 | Hyderabad | 2024-09-10        |     1011 |           9 | 2025-04-10 |       899.00 | Delivered |
+|          10 | Divya  | divya@gmail.com  | 9876543219 | Bangalore | 2024-10-05        |     1012 |          10 | 2025-04-18 |      3700.00 | Shipped   |
++-------------+--------+------------------+------------+-----------+-------------------+----------+-------------+------------+--------------+-----------+
+15 rows in set (0.01 sec)
+
+mysql> select * from products p inner join order_items o on p.product_id=o.product_id;
++------------+--------------------+----------+----------------+-------------+------------+---------------+----------+------------+----------+----------+----------+
+| product_id | product_name       | price    | stock_quantity | category_id | added_date | order_item_id | order_id | product_id | quantity | price    | subtotal |
++------------+--------------------+----------+----------------+-------------+------------+---------------+----------+------------+----------+----------+----------+
+|        101 | Laptop             | 65000.00 |             20 |           1 | 2024-01-10 |             1 |     1001 |        101 |        1 | 65000.00 | 65000.00 |
+|        102 | Smartphone         | 25000.00 |             35 |           1 | 2024-02-15 |             3 |     1002 |        102 |        1 | 25000.00 | 25000.00 |
+|        102 | Smartphone         | 25000.00 |             35 |           1 | 2024-02-15 |            17 |     1013 |        102 |        1 | 25000.00 | 25000.00 |
+|        103 | Headphones         |  1500.00 |             50 |           1 | 2024-03-20 |             2 |     1001 |        103 |        1 |  1500.00 |  1500.00 |
+|        103 | Headphones         |  1500.00 |             50 |           1 | 2024-03-20 |             7 |     1004 |        103 |        1 |  1500.00 |  1500.00 |
+|        103 | Headphones         |  1500.00 |             50 |           1 | 2024-03-20 |            18 |     1013 |        103 |        1 |  1500.00 |  1500.00 |
+|        104 | Smart Watch        |  3500.00 |             40 |           1 | 2025-01-12 |            21 |     1015 |        104 |        1 |  3500.00 |  3500.00 |
+|        105 | T-Shirt            |   799.00 |            100 |           2 | 2024-04-05 |             6 |     1003 |        105 |        1 |   501.00 |   501.00 |
+|        105 | T-Shirt            |   799.00 |            100 |           2 | 2024-04-05 |             9 |     1006 |        105 |        1 |   799.00 |   799.00 |
+|        105 | T-Shirt            |   799.00 |            100 |           2 | 2024-04-05 |            19 |     1013 |        105 |        1 |   500.00 |   500.00 |
+|        106 | Jeans              |  1499.00 |             60 |           2 | 2024-05-15 |             4 |     1003 |        106 |        1 |  1499.00 |  1499.00 |
+|        106 | Jeans              |  1499.00 |             60 |           2 | 2024-05-15 |            13 |     1010 |        106 |        1 |  1499.00 |  1499.00 |
+|        107 | Jacket             |  2999.00 |             30 |           2 | 2025-02-10 |             5 |     1003 |        107 |        1 |  2999.00 |  2999.00 |
+|        108 | Microwave Oven     | 12000.00 |             15 |           3 | 2024-06-01 |             8 |     1005 |        108 |        1 | 12000.00 | 12000.00 |
+|        109 | Mixer Grinder      |  4500.00 |             25 |           3 | 2024-07-10 |            10 |     1007 |        109 |        1 |  4500.00 |  4500.00 |
+|        110 | Air Fryer          |  6500.00 |             18 |           3 | 2025-03-05 |            11 |     1008 |        110 |        1 |  6500.00 |  6500.00 |
+|        111 | Python Programming |   899.00 |             50 |           4 | 2024-08-12 |            14 |     1011 |        111 |        1 |   899.00 |   899.00 |
+|        111 | Python Programming |   899.00 |             50 |           4 | 2024-08-12 |            24 |     1015 |        111 |        1 |     0.00 |     0.00 |
+|        112 | SQL Guide          |   699.00 |             45 |           4 | 2024-09-18 |            25 |     1015 |        112 |        1 |     0.00 |     0.00 |
+|        113 | Cricket Bat        |  3500.00 |             20 |           5 | 2024-10-10 |            12 |     1009 |        113 |        1 |  3500.00 |  3500.00 |
+|        113 | Cricket Bat        |  3500.00 |             20 |           5 | 2024-10-10 |            15 |     1012 |        113 |        1 |  3500.00 |  3500.00 |
+|        113 | Cricket Bat        |  3500.00 |             20 |           5 | 2024-10-10 |            22 |     1015 |        113 |        1 |  3500.00 |  3500.00 |
+|        114 | Football           |  1200.00 |             35 |           5 | 2025-01-20 |            16 |     1012 |        114 |        1 |  1200.00 |  1200.00 |
+|        114 | Football           |  1200.00 |             35 |           5 | 2025-01-20 |            23 |     1015 |        114 |        1 |   700.00 |   700.00 |
+|        115 | Gym Dumbbells      |  2500.00 |             25 |           5 | 2025-02-25 |            20 |     1014 |        115 |        1 |  2500.00 |  2500.00 |
++------------+--------------------+----------+----------------+-------------+------------+---------------+----------+------------+----------+----------+----------+
+25 rows in set (0.00 sec)
+       Display products added after 2024.
+mysql> select * from orders o inner join customers c on o.customer_id=c.customer_id;
++----------+-------------+------------+--------------+-----------+-------------+--------+------------------+------------+-----------+-------------------+
+| order_id | customer_id | order_date | total_amount | status    | customer_id | name   | email            | phone      | city      | registration_date |
++----------+-------------+------------+--------------+-----------+-------------+--------+------------------+------------+-----------+-------------------+
+|     1001 |           1 | 2025-01-05 |     66500.00 | Delivered |           1 | Nandu  | nandu@gmail.com  | 9876543210 | Hyderabad | 2024-01-15        |
+|     1004 |           1 | 2025-02-05 |      1500.00 | Delivered |           1 | Nandu  | nandu@gmail.com  | 9876543210 | Hyderabad | 2024-01-15        |
+|     1015 |           1 | 2025-06-01 |      7700.00 | Delivered |           1 | Nandu  | nandu@gmail.com  | 9876543210 | Hyderabad | 2024-01-15        |
+|     1002 |           2 | 2025-01-12 |     25000.00 | Delivered |           2 | Rahul  | rahul@gmail.com  | 9876543211 | Bangalore | 2024-02-10        |
+|     1013 |           2 | 2025-05-05 |     27000.00 | Delivered |           2 | Rahul  | rahul@gmail.com  | 9876543211 | Bangalore | 2024-02-10        |
+|     1003 |           3 | 2025-01-20 |      4999.00 | Shipped   |           3 | Priya  | priya@gmail.com  | 9876543212 | Hyderabad | 2024-03-05        |
+|     1008 |           3 | 2025-03-10 |      6500.00 | Shipped   |           3 | Priya  | priya@gmail.com  | 9876543212 | Hyderabad | 2024-03-05        |
+|     1005 |           4 | 2025-02-15 |     12000.00 | Cancelled |           4 | Arjun  | arjun@gmail.com  | 9876543213 | Chennai   | 2024-04-12        |
+|     1006 |           5 | 2025-02-20 |       799.00 | Delivered |           5 | Sneha  | sneha@gmail.com  | 9876543214 | Mumbai    | 2024-05-20        |
+|     1014 |           5 | 2025-05-15 |      2500.00 | Pending   |           5 | Sneha  | sneha@gmail.com  | 9876543214 | Mumbai    | 2024-05-20        |
+|     1007 |           6 | 2025-03-01 |      4500.00 | Delivered |           6 | Kiran  | kiran@gmail.com  | 9876543215 | Hyderabad | 2024-06-18        |
+|     1009 |           7 | 2025-03-15 |      3500.00 | Delivered |           7 | Anjali | anjali@gmail.com | 9876543216 | Pune      | 2024-07-25        |
+|     1010 |           8 | 2025-04-02 |      1499.00 | Delivered |           8 | Vijay  | vijay@gmail.com  | 9876543217 | Delhi     | 2024-08-14        |
+|     1011 |           9 | 2025-04-10 |       899.00 | Delivered |           9 | Ravi   | ravi@gmail.com   | 9876543218 | Hyderabad | 2024-09-10        |
+|     1012 |          10 | 2025-04-18 |      3700.00 | Shipped   |          10 | Divya  | divya@gmail.com  | 9876543219 | Bangalore | 2024-10-05        |
++----------+-------------+------------+--------------+-----------+-------------+--------+------------------+------------+-----------+-------------------+
+15 rows in set (0.00 sec)
+
+mysql> select * from products p inner join categories c on p.category_id=c.category_id;
++------------+--------------------+----------+----------------+-------------+------------+-------------+-----------------+------------------------------------+
+| product_id | product_name       | price    | stock_quantity | category_id | added_date | category_id | category_name   | description                        |
++------------+--------------------+----------+----------------+-------------+------------+-------------+-----------------+------------------------------------+
+|        101 | Laptop             | 65000.00 |             20 |           1 | 2024-01-10 |           1 | Electronics     | Electronic devices and accessories |
+|        102 | Smartphone         | 25000.00 |             35 |           1 | 2024-02-15 |           1 | Electronics     | Electronic devices and accessories |
+|        103 | Headphones         |  1500.00 |             50 |           1 | 2024-03-20 |           1 | Electronics     | Electronic devices and accessories |
+|        104 | Smart Watch        |  3500.00 |             40 |           1 | 2025-01-12 |           1 | Electronics     | Electronic devices and accessories |
+|        105 | T-Shirt            |   799.00 |            100 |           2 | 2024-04-05 |           2 | Clothing        | Men and women clothing             |
+|        106 | Jeans              |  1499.00 |             60 |           2 | 2024-05-15 |           2 | Clothing        | Men and women clothing             |
+|        107 | Jacket             |  2999.00 |             30 |           2 | 2025-02-10 |           2 | Clothing        | Men and women clothing             |
+|        108 | Microwave Oven     | 12000.00 |             15 |           3 | 2024-06-01 |           3 | Home Appliances | Appliances for home use            |
+|        109 | Mixer Grinder      |  4500.00 |             25 |           3 | 2024-07-10 |           3 | Home Appliances | Appliances for home use            |
+|        110 | Air Fryer          |  6500.00 |             18 |           3 | 2025-03-05 |           3 | Home Appliances | Appliances for home use            |
+|        111 | Python Programming |   899.00 |             50 |           4 | 2024-08-12 |           4 | Books           | Books and study materials          |
+|        112 | SQL Guide          |   699.00 |             45 |           4 | 2024-09-18 |           4 | Books           | Books and study materials          |
+|        113 | Cricket Bat        |  3500.00 |             20 |           5 | 2024-10-10 |           5 | Sports          | Sports equipment and accessories   |
+|        114 | Football           |  1200.00 |             35 |           5 | 2025-01-20 |           5 | Sports          | Sports equipment and accessories   |
+|        115 | Gym Dumbbells      |  2500.00 |             25 |           5 | 2025-02-25 |           5 | Sports          | Sports equipment and accessories   |
++------------+--------------------+----------+----------------+-------------+------------+-------------+-----------------+------------------------------------+
+15 rows in set (0.00 sec)
+
+mysql> select c.name as customer_name,o.order_id,p.product_name,oi_quantity,oi_price,oi.subtotal from customers c inner join orders o on c.customer_id=o.customer_id inner join order_items oi on oi.order_id=oi_order_id inner join products p on oi.product_id=p.product_id;
+ERROR 1054 (42S22): Unknown column 'oi_quantity' in 'field list'
+mysql> select c.name as customer_name,o.order_id,p.product_name,oi.quantity,oi.price,oi.subtotal from customers c inner join orders o on c.customer_id=o.customer_id inner join order_items oi on oi.order_id=oi_order_id inner join products p on oi.product_id=p.product_id;
+ERROR 1054 (42S22): Unknown column 'oi_order_id' in 'on clause'
+mysql> select c.name as customer_name,o.order_id,p.product_name,oi.quantity,oi.price,oi.subtotal from customers c inner join orders o on c.customer_id=o.customer_id inner join order_items oi on oi.order_id=oi.order_id inner join products p on oi.product_id=p.product_id;
++---------------+----------+--------------------+----------+----------+----------+
+| customer_name | order_id | product_name       | quantity | price    | subtotal |
++---------------+----------+--------------------+----------+----------+----------+
+| Nandu         |     1001 | Gym Dumbbells      |        1 |  2500.00 |  2500.00 |
+| Nandu         |     1001 | Football           |        1 |   700.00 |   700.00 |
+| Nandu         |     1001 | Football           |        1 |  1200.00 |  1200.00 |
+| Nandu         |     1001 | Cricket Bat        |        1 |  3500.00 |  3500.00 |
+| Nandu         |     1001 | Cricket Bat        |        1 |  3500.00 |  3500.00 |
+| Nandu         |     1001 | Cricket Bat        |        1 |  3500.00 |  3500.00 |
+| Nandu         |     1001 | SQL Guide          |        1 |     0.00 |     0.00 |
+| Nandu         |     1001 | Python Programming |        1 |     0.00 |     0.00 |
+| Nandu         |     1001 | Python Programming |        1 |   899.00 |   899.00 |
+| Nandu         |     1001 | Air Fryer          |        1 |  6500.00 |  6500.00 |
+| Nandu         |     1001 | Mixer Grinder      |        1 |  4500.00 |  4500.00 |
+| Nandu         |     1001 | Microwave Oven     |        1 | 12000.00 | 12000.00 |
+| Nandu         |     1001 | Jacket             |        1 |  2999.00 |  2999.00 |
+| Nandu         |     1001 | Jeans              |        1 |  1499.00 |  1499.00 |
+| Nandu         |     1001 | Jeans              |        1 |  1499.00 |  1499.00 |
+| Nandu         |     1001 | T-Shirt            |        1 |   500.00 |   500.00 |
+| Nandu         |     1001 | T-Shirt            |        1 |   799.00 |   799.00 |
+| Nandu         |     1001 | T-Shirt            |        1 |   501.00 |   501.00 |
+| Nandu         |     1001 | Smart Watch        |        1 |  3500.00 |  3500.00 |
+| Nandu         |     1001 | Headphones         |        1 |  1500.00 |  1500.00 |
+| Nandu         |     1001 | Headphones         |        1 |  1500.00 |  1500.00 |
+| Nandu         |     1001 | Headphones         |        1 |  1500.00 |  1500.00 |
+| Nandu         |     1001 | Smartphone         |        1 | 25000.00 | 25000.00 |
+| Nandu         |     1001 | Smartphone         |        1 | 25000.00 | 25000.00 |
+| Nandu         |     1001 | Laptop             |        1 | 65000.00 | 65000.00 |
+| Nandu         |     1004 | Gym Dumbbells      |        1 |  2500.00 |  2500.00 |
+| Nandu         |     1004 | Football           |        1 |   700.00 |   700.00 |
+| Nandu         |     1004 | Football           |        1 |  1200.00 |  1200.00 |
+| Nandu         |     1004 | Cricket Bat        |        1 |  3500.00 |  3500.00 |
+| Nandu         |     1004 | Cricket Bat        |        1 |  3500.00 |  3500.00 |
+| Nandu         |     1004 | Cricket Bat        |        1 |  3500.00 |  3500.00 |
+| Nandu         |     1004 | SQL Guide          |        1 |     0.00 |     0.00 |
+| Nandu         |     1004 | Python Programming |        1 |     0.00 |     0.00 |
+| Nandu         |     1004 | Python Programming |        1 |   899.00 |   899.00 |
+| Nandu         |     1004 | Air Fryer          |        1 |  6500.00 |  6500.00 |
+| Nandu         |     1004 | Mixer Grinder      |        1 |  4500.00 |  4500.00 |
+| Nandu         |     1004 | Microwave Oven     |        1 | 12000.00 | 12000.00 |
+| Nandu         |     1004 | Jacket             |        1 |  2999.00 |  2999.00 |
+| Nandu         |     1004 | Jeans              |        1 |  1499.00 |  1499.00 |
+| Nandu         |     1004 | Jeans              |        1 |  1499.00 |  1499.00 |
+| Nandu         |     1004 | T-Shirt            |        1 |   500.00 |   500.00 |
+| Nandu         |     1004 | T-Shirt            |        1 |   799.00 |   799.00 |
+| Nandu         |     1004 | T-Shirt            |        1 |   501.00 |   501.00 |
+| Nandu         |     1004 | Smart Watch        |        1 |  3500.00 |  3500.00 |
+| Nandu         |     1004 | Headphones         |        1 |  1500.00 |  1500.00 |
+| Nandu         |     1004 | Headphones         |        1 |  1500.00 |  1500.00 |
+| Nandu         |     1004 | Headphones         |        1 |  1500.00 |  1500.00 |
+| Nandu         |     1004 | Smartphone         |        1 | 25000.00 | 25000.00 |
+| Nandu         |     1004 | Smartphone         |        1 | 25000.00 | 25000.00 |
+| Nandu         |     1004 | Laptop             |        1 | 65000.00 | 65000.00 |
+| Nandu         |     1015 | Gym Dumbbells      |        1 |  2500.00 |  2500.00 |
+| Nandu         |     1015 | Football           |        1 |   700.00 |   700.00 |
+| Nandu         |     1015 | Football           |        1 |  1200.00 |  1200.00 |
+| Nandu         |     1015 | Cricket Bat        |        1 |  3500.00 |  3500.00 |
+| Nandu         |     1015 | Cricket Bat        |        1 |  3500.00 |  3500.00 |
+| Nandu         |     1015 | Cricket Bat        |        1 |  3500.00 |  3500.00 |
+| Nandu         |     1015 | SQL Guide          |        1 |     0.00 |     0.00 |
+| Nandu         |     1015 | Python Programming |        1 |     0.00 |     0.00 |
+| Nandu         |     1015 | Python Programming |        1 |   899.00 |   899.00 |
+| Nandu         |     1015 | Air Fryer          |        1 |  6500.00 |  6500.00 |
+| Nandu         |     1015 | Mixer Grinder      |        1 |  4500.00 |  4500.00 |
+| Nandu         |     1015 | Microwave Oven     |        1 | 12000.00 | 12000.00 |
+| Nandu         |     1015 | Jacket             |        1 |  2999.00 |  2999.00 |
+| Nandu         |     1015 | Jeans              |        1 |  1499.00 |  1499.00 |
+| Nandu         |     1015 | Jeans              |        1 |  1499.00 |  1499.00 |
+| Nandu         |     1015 | T-Shirt            |        1 |   500.00 |   500.00 |
+| Nandu         |     1015 | T-Shirt            |        1 |   799.00 |   799.00 |
+| Nandu         |     1015 | T-Shirt            |        1 |   501.00 |   501.00 |
+| Nandu         |     1015 | Smart Watch        |        1 |  3500.00 |  3500.00 |
+| Nandu         |     1015 | Headphones         |        1 |  1500.00 |  1500.00 |
+| Nandu         |     1015 | Headphones         |        1 |  1500.00 |  1500.00 |
+| Nandu         |     1015 | Headphones         |        1 |  1500.00 |  1500.00 |
+| Nandu         |     1015 | Smartphone         |        1 | 25000.00 | 25000.00 |
+| Nandu         |     1015 | Smartphone         |        1 | 25000.00 | 25000.00 |
+| Nandu         |     1015 | Laptop             |        1 | 65000.00 | 65000.00 |
+| Rahul         |     1002 | Gym Dumbbells      |        1 |  2500.00 |  2500.00 |
+| Rahul         |     1002 | Football           |        1 |   700.00 |   700.00 |
+| Rahul         |     1002 | Football           |        1 |  1200.00 |  1200.00 |
+| Rahul         |     1002 | Cricket Bat        |        1 |  3500.00 |  3500.00 |
+| Rahul         |     1002 | Cricket Bat        |        1 |  3500.00 |  3500.00 |
+| Rahul         |     1002 | Cricket Bat        |        1 |  3500.00 |  3500.00 |
+| Rahul         |     1002 | SQL Guide          |        1 |     0.00 |     0.00 |
+| Rahul         |     1002 | Python Programming |        1 |     0.00 |     0.00 |
+| Rahul         |     1002 | Python Programming |        1 |   899.00 |   899.00 |
+| Rahul         |     1002 | Air Fryer          |        1 |  6500.00 |  6500.00 |
+| Rahul         |     1002 | Mixer Grinder      |        1 |  4500.00 |  4500.00 |
+| Rahul         |     1002 | Microwave Oven     |        1 | 12000.00 | 12000.00 |
+| Rahul         |     1002 | Jacket             |        1 |  2999.00 |  2999.00 |
+| Rahul         |     1002 | Jeans              |        1 |  1499.00 |  1499.00 |
+| Rahul         |     1002 | Jeans              |        1 |  1499.00 |  1499.00 |
+| Rahul         |     1002 | T-Shirt            |        1 |   500.00 |   500.00 |
+| Rahul         |     1002 | T-Shirt            |        1 |   799.00 |   799.00 |
+| Rahul         |     1002 | T-Shirt            |        1 |   501.00 |   501.00 |
+| Rahul         |     1002 | Smart Watch        |        1 |  3500.00 |  3500.00 |
+| Rahul         |     1002 | Headphones         |        1 |  1500.00 |  1500.00 |
+| Rahul         |     1002 | Headphones         |        1 |  1500.00 |  1500.00 |
+| Rahul         |     1002 | Headphones         |        1 |  1500.00 |  1500.00 |
+| Rahul         |     1002 | Smartphone         |        1 | 25000.00 | 25000.00 |
+| Rahul         |     1002 | Smartphone         |        1 | 25000.00 | 25000.00 |
+| Rahul         |     1002 | Laptop             |        1 | 65000.00 | 65000.00 |
+| Rahul         |     1013 | Gym Dumbbells      |        1 |  2500.00 |  2500.00 |
+| Rahul         |     1013 | Football           |        1 |   700.00 |   700.00 |
+| Rahul         |     1013 | Football           |        1 |  1200.00 |  1200.00 |
+| Rahul         |     1013 | Cricket Bat        |        1 |  3500.00 |  3500.00 |
+| Rahul         |     1013 | Cricket Bat        |        1 |  3500.00 |  3500.00 |
+| Rahul         |     1013 | Cricket Bat        |        1 |  3500.00 |  3500.00 |
+| Rahul         |     1013 | SQL Guide          |        1 |     0.00 |     0.00 |
+| Rahul         |     1013 | Python Programming |        1 |     0.00 |     0.00 |
+| Rahul         |     1013 | Python Programming |        1 |   899.00 |   899.00 |
+| Rahul         |     1013 | Air Fryer          |        1 |  6500.00 |  6500.00 |
+| Rahul         |     1013 | Mixer Grinder      |        1 |  4500.00 |  4500.00 |
+| Rahul         |     1013 | Microwave Oven     |        1 | 12000.00 | 12000.00 |
+| Rahul         |     1013 | Jacket             |        1 |  2999.00 |  2999.00 |
+| Rahul         |     1013 | Jeans              |        1 |  1499.00 |  1499.00 |
+| Rahul         |     1013 | Jeans              |        1 |  1499.00 |  1499.00 |
+| Rahul         |     1013 | T-Shirt            |        1 |   500.00 |   500.00 |
+| Rahul         |     1013 | T-Shirt            |        1 |   799.00 |   799.00 |
+| Rahul         |     1013 | T-Shirt            |        1 |   501.00 |   501.00 |
+| Rahul         |     1013 | Smart Watch        |        1 |  3500.00 |  3500.00 |
+| Rahul         |     1013 | Headphones         |        1 |  1500.00 |  1500.00 |
+| Rahul         |     1013 | Headphones         |        1 |  1500.00 |  1500.00 |
+| Rahul         |     1013 | Headphones         |        1 |  1500.00 |  1500.00 |
+| Rahul         |     1013 | Smartphone         |        1 | 25000.00 | 25000.00 |
+| Rahul         |     1013 | Smartphone         |        1 | 25000.00 | 25000.00 |
+| Rahul         |     1013 | Laptop             |        1 | 65000.00 | 65000.00 |
+| Priya         |     1003 | Gym Dumbbells      |        1 |  2500.00 |  2500.00 |
+| Priya         |     1003 | Football           |        1 |   700.00 |   700.00 |
+| Priya         |     1003 | Football           |        1 |  1200.00 |  1200.00 |
+| Priya         |     1003 | Cricket Bat        |        1 |  3500.00 |  3500.00 |
+| Priya         |     1003 | Cricket Bat        |        1 |  3500.00 |  3500.00 |
+| Priya         |     1003 | Cricket Bat        |        1 |  3500.00 |  3500.00 |
+| Priya         |     1003 | SQL Guide          |        1 |     0.00 |     0.00 |
+| Priya         |     1003 | Python Programming |        1 |     0.00 |     0.00 |
+| Priya         |     1003 | Python Programming |        1 |   899.00 |   899.00 |
+| Priya         |     1003 | Air Fryer          |        1 |  6500.00 |  6500.00 |
+| Priya         |     1003 | Mixer Grinder      |        1 |  4500.00 |  4500.00 |
+| Priya         |     1003 | Microwave Oven     |        1 | 12000.00 | 12000.00 |
+| Priya         |     1003 | Jacket             |        1 |  2999.00 |  2999.00 |
+| Priya         |     1003 | Jeans              |        1 |  1499.00 |  1499.00 |
+| Priya         |     1003 | Jeans              |        1 |  1499.00 |  1499.00 |
+| Priya         |     1003 | T-Shirt            |        1 |   500.00 |   500.00 |
+| Priya         |     1003 | T-Shirt            |        1 |   799.00 |   799.00 |
+| Priya         |     1003 | T-Shirt            |        1 |   501.00 |   501.00 |
+| Priya         |     1003 | Smart Watch        |        1 |  3500.00 |  3500.00 |
+| Priya         |     1003 | Headphones         |        1 |  1500.00 |  1500.00 |
+| Priya         |     1003 | Headphones         |        1 |  1500.00 |  1500.00 |
+| Priya         |     1003 | Headphones         |        1 |  1500.00 |  1500.00 |
+| Priya         |     1003 | Smartphone         |        1 | 25000.00 | 25000.00 |
+| Priya         |     1003 | Smartphone         |        1 | 25000.00 | 25000.00 |
+| Priya         |     1003 | Laptop             |        1 | 65000.00 | 65000.00 |
+| Priya         |     1008 | Gym Dumbbells      |        1 |  2500.00 |  2500.00 |
+| Priya         |     1008 | Football           |        1 |   700.00 |   700.00 |
+| Priya         |     1008 | Football           |        1 |  1200.00 |  1200.00 |
+| Priya         |     1008 | Cricket Bat        |        1 |  3500.00 |  3500.00 |
+| Priya         |     1008 | Cricket Bat        |        1 |  3500.00 |  3500.00 |
+| Priya         |     1008 | Cricket Bat        |        1 |  3500.00 |  3500.00 |
+| Priya         |     1008 | SQL Guide          |        1 |     0.00 |     0.00 |
+| Priya         |     1008 | Python Programming |        1 |     0.00 |     0.00 |
+| Priya         |     1008 | Python Programming |        1 |   899.00 |   899.00 |
+| Priya         |     1008 | Air Fryer          |        1 |  6500.00 |  6500.00 |
+| Priya         |     1008 | Mixer Grinder      |        1 |  4500.00 |  4500.00 |
+| Priya         |     1008 | Microwave Oven     |        1 | 12000.00 | 12000.00 |
+| Priya         |     1008 | Jacket             |        1 |  2999.00 |  2999.00 |
+| Priya         |     1008 | Jeans              |        1 |  1499.00 |  1499.00 |
+| Priya         |     1008 | Jeans              |        1 |  1499.00 |  1499.00 |
+| Priya         |     1008 | T-Shirt            |        1 |   500.00 |   500.00 |
+| Priya         |     1008 | T-Shirt            |        1 |   799.00 |   799.00 |
+| Priya         |     1008 | T-Shirt            |        1 |   501.00 |   501.00 |
+| Priya         |     1008 | Smart Watch        |        1 |  3500.00 |  3500.00 |
+| Priya         |     1008 | Headphones         |        1 |  1500.00 |  1500.00 |
+| Priya         |     1008 | Headphones         |        1 |  1500.00 |  1500.00 |
+| Priya         |     1008 | Headphones         |        1 |  1500.00 |  1500.00 |
+| Priya         |     1008 | Smartphone         |        1 | 25000.00 | 25000.00 |
+| Priya         |     1008 | Smartphone         |        1 | 25000.00 | 25000.00 |
+| Priya         |     1008 | Laptop             |        1 | 65000.00 | 65000.00 |
+| Arjun         |     1005 | Gym Dumbbells      |        1 |  2500.00 |  2500.00 |
+| Arjun         |     1005 | Football           |        1 |   700.00 |   700.00 |
+| Arjun         |     1005 | Football           |        1 |  1200.00 |  1200.00 |
+| Arjun         |     1005 | Cricket Bat        |        1 |  3500.00 |  3500.00 |
+| Arjun         |     1005 | Cricket Bat        |        1 |  3500.00 |  3500.00 |
+| Arjun         |     1005 | Cricket Bat        |        1 |  3500.00 |  3500.00 |
+| Arjun         |     1005 | SQL Guide          |        1 |     0.00 |     0.00 |
+| Arjun         |     1005 | Python Programming |        1 |     0.00 |     0.00 |
+| Arjun         |     1005 | Python Programming |        1 |   899.00 |   899.00 |
+| Arjun         |     1005 | Air Fryer          |        1 |  6500.00 |  6500.00 |
+| Arjun         |     1005 | Mixer Grinder      |        1 |  4500.00 |  4500.00 |
+| Arjun         |     1005 | Microwave Oven     |        1 | 12000.00 | 12000.00 |
+| Arjun         |     1005 | Jacket             |        1 |  2999.00 |  2999.00 |
+| Arjun         |     1005 | Jeans              |        1 |  1499.00 |  1499.00 |
+| Arjun         |     1005 | Jeans              |        1 |  1499.00 |  1499.00 |
+| Arjun         |     1005 | T-Shirt            |        1 |   500.00 |   500.00 |
+| Arjun         |     1005 | T-Shirt            |        1 |   799.00 |   799.00 |
+| Arjun         |     1005 | T-Shirt            |        1 |   501.00 |   501.00 |
+| Arjun         |     1005 | Smart Watch        |        1 |  3500.00 |  3500.00 |
+| Arjun         |     1005 | Headphones         |        1 |  1500.00 |  1500.00 |
+| Arjun         |     1005 | Headphones         |        1 |  1500.00 |  1500.00 |
+| Arjun         |     1005 | Headphones         |        1 |  1500.00 |  1500.00 |
+| Arjun         |     1005 | Smartphone         |        1 | 25000.00 | 25000.00 |
+| Arjun         |     1005 | Smartphone         |        1 | 25000.00 | 25000.00 |
+| Arjun         |     1005 | Laptop             |        1 | 65000.00 | 65000.00 |
+| Sneha         |     1006 | Gym Dumbbells      |        1 |  2500.00 |  2500.00 |
+| Sneha         |     1006 | Football           |        1 |   700.00 |   700.00 |
+| Sneha         |     1006 | Football           |        1 |  1200.00 |  1200.00 |
+| Sneha         |     1006 | Cricket Bat        |        1 |  3500.00 |  3500.00 |
+| Sneha         |     1006 | Cricket Bat        |        1 |  3500.00 |  3500.00 |
+| Sneha         |     1006 | Cricket Bat        |        1 |  3500.00 |  3500.00 |
+| Sneha         |     1006 | SQL Guide          |        1 |     0.00 |     0.00 |
+| Sneha         |     1006 | Python Programming |        1 |     0.00 |     0.00 |
+| Sneha         |     1006 | Python Programming |        1 |   899.00 |   899.00 |
+| Sneha         |     1006 | Air Fryer          |        1 |  6500.00 |  6500.00 |
+| Sneha         |     1006 | Mixer Grinder      |        1 |  4500.00 |  4500.00 |
+| Sneha         |     1006 | Microwave Oven     |        1 | 12000.00 | 12000.00 |
+| Sneha         |     1006 | Jacket             |        1 |  2999.00 |  2999.00 |
+| Sneha         |     1006 | Jeans              |        1 |  1499.00 |  1499.00 |
+| Sneha         |     1006 | Jeans              |        1 |  1499.00 |  1499.00 |
+| Sneha         |     1006 | T-Shirt            |        1 |   500.00 |   500.00 |
+| Sneha         |     1006 | T-Shirt            |        1 |   799.00 |   799.00 |
+| Sneha         |     1006 | T-Shirt            |        1 |   501.00 |   501.00 |
+| Sneha         |     1006 | Smart Watch        |        1 |  3500.00 |  3500.00 |
+| Sneha         |     1006 | Headphones         |        1 |  1500.00 |  1500.00 |
+| Sneha         |     1006 | Headphones         |        1 |  1500.00 |  1500.00 |
+| Sneha         |     1006 | Headphones         |        1 |  1500.00 |  1500.00 |
+| Sneha         |     1006 | Smartphone         |        1 | 25000.00 | 25000.00 |
+| Sneha         |     1006 | Smartphone         |        1 | 25000.00 | 25000.00 |
+| Sneha         |     1006 | Laptop             |        1 | 65000.00 | 65000.00 |
+| Sneha         |     1014 | Gym Dumbbells      |        1 |  2500.00 |  2500.00 |
+| Sneha         |     1014 | Football           |        1 |   700.00 |   700.00 |
+| Sneha         |     1014 | Football           |        1 |  1200.00 |  1200.00 |
+| Sneha         |     1014 | Cricket Bat        |        1 |  3500.00 |  3500.00 |
+| Sneha         |     1014 | Cricket Bat        |        1 |  3500.00 |  3500.00 |
+| Sneha         |     1014 | Cricket Bat        |        1 |  3500.00 |  3500.00 |
+| Sneha         |     1014 | SQL Guide          |        1 |     0.00 |     0.00 |
+| Sneha         |     1014 | Python Programming |        1 |     0.00 |     0.00 |
+| Sneha         |     1014 | Python Programming |        1 |   899.00 |   899.00 |
+| Sneha         |     1014 | Air Fryer          |        1 |  6500.00 |  6500.00 |
+| Sneha         |     1014 | Mixer Grinder      |        1 |  4500.00 |  4500.00 |
+| Sneha         |     1014 | Microwave Oven     |        1 | 12000.00 | 12000.00 |
+| Sneha         |     1014 | Jacket             |        1 |  2999.00 |  2999.00 |
+| Sneha         |     1014 | Jeans              |        1 |  1499.00 |  1499.00 |
+| Sneha         |     1014 | Jeans              |        1 |  1499.00 |  1499.00 |
+| Sneha         |     1014 | T-Shirt            |        1 |   500.00 |   500.00 |
+| Sneha         |     1014 | T-Shirt            |        1 |   799.00 |   799.00 |
+| Sneha         |     1014 | T-Shirt            |        1 |   501.00 |   501.00 |
+| Sneha         |     1014 | Smart Watch        |        1 |  3500.00 |  3500.00 |
+| Sneha         |     1014 | Headphones         |        1 |  1500.00 |  1500.00 |
+| Sneha         |     1014 | Headphones         |        1 |  1500.00 |  1500.00 |
+| Sneha         |     1014 | Headphones         |        1 |  1500.00 |  1500.00 |
+| Sneha         |     1014 | Smartphone         |        1 | 25000.00 | 25000.00 |
+| Sneha         |     1014 | Smartphone         |        1 | 25000.00 | 25000.00 |
+| Sneha         |     1014 | Laptop             |        1 | 65000.00 | 65000.00 |
+| Kiran         |     1007 | Gym Dumbbells      |        1 |  2500.00 |  2500.00 |
+| Kiran         |     1007 | Football           |        1 |   700.00 |   700.00 |
+| Kiran         |     1007 | Football           |        1 |  1200.00 |  1200.00 |
+| Kiran         |     1007 | Cricket Bat        |        1 |  3500.00 |  3500.00 |
+| Kiran         |     1007 | Cricket Bat        |        1 |  3500.00 |  3500.00 |
+| Kiran         |     1007 | Cricket Bat        |        1 |  3500.00 |  3500.00 |
+| Kiran         |     1007 | SQL Guide          |        1 |     0.00 |     0.00 |
+| Kiran         |     1007 | Python Programming |        1 |     0.00 |     0.00 |
+| Kiran         |     1007 | Python Programming |        1 |   899.00 |   899.00 |
+| Kiran         |     1007 | Air Fryer          |        1 |  6500.00 |  6500.00 |
+| Kiran         |     1007 | Mixer Grinder      |        1 |  4500.00 |  4500.00 |
+| Kiran         |     1007 | Microwave Oven     |        1 | 12000.00 | 12000.00 |
+| Kiran         |     1007 | Jacket             |        1 |  2999.00 |  2999.00 |
+| Kiran         |     1007 | Jeans              |        1 |  1499.00 |  1499.00 |
+| Kiran         |     1007 | Jeans              |        1 |  1499.00 |  1499.00 |
+| Kiran         |     1007 | T-Shirt            |        1 |   500.00 |   500.00 |
+| Kiran         |     1007 | T-Shirt            |        1 |   799.00 |   799.00 |
+| Kiran         |     1007 | T-Shirt            |        1 |   501.00 |   501.00 |
+| Kiran         |     1007 | Smart Watch        |        1 |  3500.00 |  3500.00 |
+| Kiran         |     1007 | Headphones         |        1 |  1500.00 |  1500.00 |
+| Kiran         |     1007 | Headphones         |        1 |  1500.00 |  1500.00 |
+| Kiran         |     1007 | Headphones         |        1 |  1500.00 |  1500.00 |
+| Kiran         |     1007 | Smartphone         |        1 | 25000.00 | 25000.00 |
+| Kiran         |     1007 | Smartphone         |        1 | 25000.00 | 25000.00 |
+| Kiran         |     1007 | Laptop             |        1 | 65000.00 | 65000.00 |
+| Anjali        |     1009 | Gym Dumbbells      |        1 |  2500.00 |  2500.00 |
+| Anjali        |     1009 | Football           |        1 |   700.00 |   700.00 |
+| Anjali        |     1009 | Football           |        1 |  1200.00 |  1200.00 |
+| Anjali        |     1009 | Cricket Bat        |        1 |  3500.00 |  3500.00 |
+| Anjali        |     1009 | Cricket Bat        |        1 |  3500.00 |  3500.00 |
+| Anjali        |     1009 | Cricket Bat        |        1 |  3500.00 |  3500.00 |
+| Anjali        |     1009 | SQL Guide          |        1 |     0.00 |     0.00 |
+| Anjali        |     1009 | Python Programming |        1 |     0.00 |     0.00 |
+| Anjali        |     1009 | Python Programming |        1 |   899.00 |   899.00 |
+| Anjali        |     1009 | Air Fryer          |        1 |  6500.00 |  6500.00 |
+| Anjali        |     1009 | Mixer Grinder      |        1 |  4500.00 |  4500.00 |
+| Anjali        |     1009 | Microwave Oven     |        1 | 12000.00 | 12000.00 |
+| Anjali        |     1009 | Jacket             |        1 |  2999.00 |  2999.00 |
+| Anjali        |     1009 | Jeans              |        1 |  1499.00 |  1499.00 |
+| Anjali        |     1009 | Jeans              |        1 |  1499.00 |  1499.00 |
+| Anjali        |     1009 | T-Shirt            |        1 |   500.00 |   500.00 |
+| Anjali        |     1009 | T-Shirt            |        1 |   799.00 |   799.00 |
+| Anjali        |     1009 | T-Shirt            |        1 |   501.00 |   501.00 |
+| Anjali        |     1009 | Smart Watch        |        1 |  3500.00 |  3500.00 |
+| Anjali        |     1009 | Headphones         |        1 |  1500.00 |  1500.00 |
+| Anjali        |     1009 | Headphones         |        1 |  1500.00 |  1500.00 |
+| Anjali        |     1009 | Headphones         |        1 |  1500.00 |  1500.00 |
+| Anjali        |     1009 | Smartphone         |        1 | 25000.00 | 25000.00 |
+| Anjali        |     1009 | Smartphone         |        1 | 25000.00 | 25000.00 |
+| Anjali        |     1009 | Laptop             |        1 | 65000.00 | 65000.00 |
+| Vijay         |     1010 | Gym Dumbbells      |        1 |  2500.00 |  2500.00 |
+| Vijay         |     1010 | Football           |        1 |   700.00 |   700.00 |
+| Vijay         |     1010 | Football           |        1 |  1200.00 |  1200.00 |
+| Vijay         |     1010 | Cricket Bat        |        1 |  3500.00 |  3500.00 |
+| Vijay         |     1010 | Cricket Bat        |        1 |  3500.00 |  3500.00 |
+| Vijay         |     1010 | Cricket Bat        |        1 |  3500.00 |  3500.00 |
+| Vijay         |     1010 | SQL Guide          |        1 |     0.00 |     0.00 |
+| Vijay         |     1010 | Python Programming |        1 |     0.00 |     0.00 |
+| Vijay         |     1010 | Python Programming |        1 |   899.00 |   899.00 |
+| Vijay         |     1010 | Air Fryer          |        1 |  6500.00 |  6500.00 |
+| Vijay         |     1010 | Mixer Grinder      |        1 |  4500.00 |  4500.00 |
+| Vijay         |     1010 | Microwave Oven     |        1 | 12000.00 | 12000.00 |
+| Vijay         |     1010 | Jacket             |        1 |  2999.00 |  2999.00 |
+| Vijay         |     1010 | Jeans              |        1 |  1499.00 |  1499.00 |
+| Vijay         |     1010 | Jeans              |        1 |  1499.00 |  1499.00 |
+| Vijay         |     1010 | T-Shirt            |        1 |   500.00 |   500.00 |
+| Vijay         |     1010 | T-Shirt            |        1 |   799.00 |   799.00 |
+| Vijay         |     1010 | T-Shirt            |        1 |   501.00 |   501.00 |
+| Vijay         |     1010 | Smart Watch        |        1 |  3500.00 |  3500.00 |
+| Vijay         |     1010 | Headphones         |        1 |  1500.00 |  1500.00 |
+| Vijay         |     1010 | Headphones         |        1 |  1500.00 |  1500.00 |
+| Vijay         |     1010 | Headphones         |        1 |  1500.00 |  1500.00 |
+| Vijay         |     1010 | Smartphone         |        1 | 25000.00 | 25000.00 |
+| Vijay         |     1010 | Smartphone         |        1 | 25000.00 | 25000.00 |
+| Vijay         |     1010 | Laptop             |        1 | 65000.00 | 65000.00 |
+| Ravi          |     1011 | Gym Dumbbells      |        1 |  2500.00 |  2500.00 |
+| Ravi          |     1011 | Football           |        1 |   700.00 |   700.00 |
+| Ravi          |     1011 | Football           |        1 |  1200.00 |  1200.00 |
+| Ravi          |     1011 | Cricket Bat        |        1 |  3500.00 |  3500.00 |
+| Ravi          |     1011 | Cricket Bat        |        1 |  3500.00 |  3500.00 |
+| Ravi          |     1011 | Cricket Bat        |        1 |  3500.00 |  3500.00 |
+| Ravi          |     1011 | SQL Guide          |        1 |     0.00 |     0.00 |
+| Ravi          |     1011 | Python Programming |        1 |     0.00 |     0.00 |
+| Ravi          |     1011 | Python Programming |        1 |   899.00 |   899.00 |
+| Ravi          |     1011 | Air Fryer          |        1 |  6500.00 |  6500.00 |
+| Ravi          |     1011 | Mixer Grinder      |        1 |  4500.00 |  4500.00 |
+| Ravi          |     1011 | Microwave Oven     |        1 | 12000.00 | 12000.00 |
+| Ravi          |     1011 | Jacket             |        1 |  2999.00 |  2999.00 |
+| Ravi          |     1011 | Jeans              |        1 |  1499.00 |  1499.00 |
+| Ravi          |     1011 | Jeans              |        1 |  1499.00 |  1499.00 |
+| Ravi          |     1011 | T-Shirt            |        1 |   500.00 |   500.00 |
+| Ravi          |     1011 | T-Shirt            |        1 |   799.00 |   799.00 |
+| Ravi          |     1011 | T-Shirt            |        1 |   501.00 |   501.00 |
+| Ravi          |     1011 | Smart Watch        |        1 |  3500.00 |  3500.00 |
+| Ravi          |     1011 | Headphones         |        1 |  1500.00 |  1500.00 |
+| Ravi          |     1011 | Headphones         |        1 |  1500.00 |  1500.00 |
+| Ravi          |     1011 | Headphones         |        1 |  1500.00 |  1500.00 |
+| Ravi          |     1011 | Smartphone         |        1 | 25000.00 | 25000.00 |
+| Ravi          |     1011 | Smartphone         |        1 | 25000.00 | 25000.00 |
+| Ravi          |     1011 | Laptop             |        1 | 65000.00 | 65000.00 |
+| Divya         |     1012 | Gym Dumbbells      |        1 |  2500.00 |  2500.00 |
+| Divya         |     1012 | Football           |        1 |   700.00 |   700.00 |
+| Divya         |     1012 | Football           |        1 |  1200.00 |  1200.00 |
+| Divya         |     1012 | Cricket Bat        |        1 |  3500.00 |  3500.00 |
+| Divya         |     1012 | Cricket Bat        |        1 |  3500.00 |  3500.00 |
+| Divya         |     1012 | Cricket Bat        |        1 |  3500.00 |  3500.00 |
+| Divya         |     1012 | SQL Guide          |        1 |     0.00 |     0.00 |
+| Divya         |     1012 | Python Programming |        1 |     0.00 |     0.00 |
+| Divya         |     1012 | Python Programming |        1 |   899.00 |   899.00 |
+| Divya         |     1012 | Air Fryer          |        1 |  6500.00 |  6500.00 |
+| Divya         |     1012 | Mixer Grinder      |        1 |  4500.00 |  4500.00 |
+| Divya         |     1012 | Microwave Oven     |        1 | 12000.00 | 12000.00 |
+| Divya         |     1012 | Jacket             |        1 |  2999.00 |  2999.00 |
+| Divya         |     1012 | Jeans              |        1 |  1499.00 |  1499.00 |
+| Divya         |     1012 | Jeans              |        1 |  1499.00 |  1499.00 |
+| Divya         |     1012 | T-Shirt            |        1 |   500.00 |   500.00 |
+| Divya         |     1012 | T-Shirt            |        1 |   799.00 |   799.00 |
+| Divya         |     1012 | T-Shirt            |        1 |   501.00 |   501.00 |
+| Divya         |     1012 | Smart Watch        |        1 |  3500.00 |  3500.00 |
+| Divya         |     1012 | Headphones         |        1 |  1500.00 |  1500.00 |
+| Divya         |     1012 | Headphones         |        1 |  1500.00 |  1500.00 |
+| Divya         |     1012 | Headphones         |        1 |  1500.00 |  1500.00 |
+| Divya         |     1012 | Smartphone         |        1 | 25000.00 | 25000.00 |
+| Divya         |     1012 | Smartphone         |        1 | 25000.00 | 25000.00 |
+| Divya         |     1012 | Laptop             |        1 | 65000.00 | 65000.00 |
++---------------+----------+--------------------+----------+----------+----------+
+375 rows in set (0.01 sec)
+
+mysql> select count(products_name) from products;
+ERROR 1054 (42S22): Unknown column 'products_name' in 'field list'
+mysql> select count(product_name) from products;
++---------------------+
+| count(product_name) |
++---------------------+
+|                  15 |
++---------------------+
+1 row in set (0.02 sec)
+
+mysql> select avg(price) from products;
++-------------+
+| avg(price)  |
++-------------+
+| 8806.333333 |
++-------------+
+1 row in set (0.01 sec)
+
+mysql> select sum(totatl_amount) as total_sales from orders;
+ERROR 1054 (42S22): Unknown column 'totatl_amount' in 'field list'
+mysql> select sum(total_amount) as total_sales from orders;
++-------------+
+| total_sales |
++-------------+
+|   168596.00 |
++-------------+
+1 row in set (0.00 sec)
+
+mysql> select count(*) as total_orders from orders;
++--------------+
+| total_orders |
++--------------+
+|           15 |
++--------------+
+1 row in set (0.01 sec)
+
+mysql> SELECT COUNT(*) AS total_orders
+    -> FROM Orders
+    -> WHERE status <> 'Cancelled';
++--------------+
+| total_orders |
++--------------+
+|           14 |
++--------------+
+1 row in set (0.00 sec)
+
+mysql> select status ,count(*) as total_orders from orders group by status;
++-----------+--------------+
+| status    | total_orders |
++-----------+--------------+
+| Delivered |           10 |
+| Shipped   |            3 |
+| Cancelled |            1 |
+| Pending   |            1 |
++-----------+--------------+
+4 rows in set (0.01 sec)
+
+mysql> select product_name,max(price) from products;
+ERROR 1140 (42000): In aggregated query without GROUP BY, expression #1 of SELECT list contains nonaggregated column '10k.products.product_name'; this is incompatible with sql_mode=only_full_group_by
+mysql> select max(price) from products;
++------------+
+| max(price) |
++------------+
+|   65000.00 |
++------------+
+1 row in set (0.00 sec)
+
+mysql> select product_name,price from products where price=(select max(price) from products);
++--------------+----------+
+| product_name | price    |
++--------------+----------+
+| Laptop       | 65000.00 |
++--------------+----------+
+1 row in set (0.01 sec)
+
+mysql> select c.customer_id,c.name from customers c where not exists(select 1 from orders o where o.customer_id=c.customer_id);
+Empty set (0.01 sec)
+
+mysql> select c.customer_id,c.name from customers c where not exists(select 0 from orders o where o.customer_id=c.customer_id);
+Empty set (0.00 sec)
+
+mysql> select c.customer_id,c.name from customers c where not exists(select 1 from orders o where o.customer_id=c.customer_id);
+Empty set (0.00 sec)
+
+mysql> select * product p where not exists (select * from order_items oi where oi.product_id=p.product_id);
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'product p where not exists (select * from order_items oi where oi.product_id=p.p' at line 1
+mysql> select * from product p where not exists (select * from order_items oi where oi.product_id=p.product_id);
+ERROR 1146 (42S02): Table '10k.product' doesn't exist
+mysql> select * from products p where not exists (select * from order_items oi where oi.product_id=p.product_id);
+Empty set (0.00 sec)
+
+mysql> select p.products_name from products p where price>(select avg(price) from products p);
+ERROR 1054 (42S22): Unknown column 'p.products_name' in 'field list'
+mysql> select p.product_name from products p where price>(select avg(price) from products p);
++----------------+
+| product_name   |
++----------------+
+| Laptop         |
+| Smartphone     |
+| Microwave Oven |
++----------------+
+3 rows in set (0.00 sec)
+
+mysql> select c.customer_id,c.name,sum(total_amount) as taotal_spendings from customers c join orders o on c.customer_id=o.customer_id group by c.customer_id,c.name having sum(o.total_amount) > (select customer_id,sum(total_amount) as customer_total from orders group by customer_id)as spending );
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'as spending )' at line 1
+mysql> select c.customer_id,c.name,sum(o.total_amount) as total_spendings from customers c join orders o on c.customer_id=o.customer_id group by c.customer_id,c.name having sum(o.total_amount) > select avg(customer_total) from  (select customer_id,sum(total_amount) as customer_total from orders group by customer_id)as spending );
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'select avg(customer_total) from  (select customer_id,sum(total_amount) as custom' at line 1
+mysql> select c.customer_id,c.name,sum(o.total_amount) as total_spending from customers c join orders o on c.customer_id=o.customer_id group by c.customer_id,c.name having sum(o.total_amount) >( select avg(customer_total) from  (select customer_id,sum(total_amount) as customer_total from orders group by customer_id)as spending );
++-------------+-------+----------------+
+| customer_id | name  | total_spending |
++-------------+-------+----------------+
+|           1 | Nandu |       75700.00 |
+|           2 | Rahul |       52000.00 |
++-------------+-------+----------------+
+2 rows in set (0.01 sec)
+
+mysql> select * from orders where total_amount>(select avg(total_amount) from orders);
++----------+-------------+------------+--------------+-----------+
+| order_id | customer_id | order_date | total_amount | status    |
++----------+-------------+------------+--------------+-----------+
+|     1001 |           1 | 2025-01-05 |     66500.00 | Delivered |
+|     1002 |           2 | 2025-01-12 |     25000.00 | Delivered |
+|     1005 |           4 | 2025-02-15 |     12000.00 | Cancelled |
+|     1013 |           2 | 2025-05-05 |     27000.00 | Delivered |
++----------+-------------+------------+--------------+-----------+
+4 rows ^C     (0.00 sec)
+mysql> ^X^X^C
+mysql> ^C
+mysql> update products set price = 60000 wher product_id=101;
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'wher product_id=101' at line 1
+mysql> update products set price = 60000 where product_id=101;
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update customers set email = 'new_nandu@gmail.com' where customer_id=1;
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update products set category_id=1 where product_id=114;
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> SELECT *
+    -> FROM Products
+    -> WHERE product_id = 114;
++------------+--------------+---------+----------------+-------------+------------+
+| product_id | product_name | price   | stock_quantity | category_id | added_date |
++------------+--------------+---------+----------------+-------------+------------+
+|        114 | Football     | 1200.00 |             35 |           1 | 2025-01-20 |
++------------+--------------+---------+----------------+-------------+------------+
+1 row in set (0.00 sec)
+
+mysql> delete from orders where status='cancelled';
+ERROR 1451 (23000): Cannot delete or update a parent row: a foreign key constraint fails (`10k`.`order_items`, CONSTRAINT `order_items_ibfk_1` FOREIGN KEY (`order_id`) REFERENCES `orders` (`order_id`))
+mysql> delete from order_items where order_id in (select order_id from orders where orders where status='cancelled');
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'where status='cancelled')' at line 1
+mysql> delete from order_items where order_id in (select order_id from orders where status='cancelled');
+Query OK, 1 row affected (0.01 sec)
+
+mysql> select * from order_items;
++---------------+----------+------------+----------+----------+----------+
+| order_item_id | order_id | product_id | quantity | price    | subtotal |
++---------------+----------+------------+----------+----------+----------+
+|             1 |     1001 |        101 |        1 | 65000.00 | 65000.00 |
+|             2 |     1001 |        103 |        1 |  1500.00 |  1500.00 |
+|             3 |     1002 |        102 |        1 | 25000.00 | 25000.00 |
+|             4 |     1003 |        106 |        1 |  1499.00 |  1499.00 |
+|             5 |     1003 |        107 |        1 |  2999.00 |  2999.00 |
+|             6 |     1003 |        105 |        1 |   501.00 |   501.00 |
+|             7 |     1004 |        103 |        1 |  1500.00 |  1500.00 |
+|             9 |     1006 |        105 |        1 |   799.00 |   799.00 |
+|            10 |     1007 |        109 |        1 |  4500.00 |  4500.00 |
+|            11 |     1008 |        110 |        1 |  6500.00 |  6500.00 |
+|            12 |     1009 |        113 |        1 |  3500.00 |  3500.00 |
+|            13 |     1010 |        106 |        1 |  1499.00 |  1499.00 |
+|            14 |     1011 |        111 |        1 |   899.00 |   899.00 |
+|            15 |     1012 |        113 |        1 |  3500.00 |  3500.00 |
+|            16 |     1012 |        114 |        1 |  1200.00 |  1200.00 |
+|            17 |     1013 |        102 |        1 | 25000.00 | 25000.00 |
+|            18 |     1013 |        103 |        1 |  1500.00 |  1500.00 |
+|            19 |     1013 |        105 |        1 |   500.00 |   500.00 |
+|            20 |     1014 |        115 |        1 |  2500.00 |  2500.00 |
+|            21 |     1015 |        104 |        1 |  3500.00 |  3500.00 |
+|            22 |     1015 |        113 |        1 |  3500.00 |  3500.00 |
+|            23 |     1015 |        114 |        1 |   700.00 |   700.00 |
+|            24 |     1015 |        111 |        1 |     0.00 |     0.00 |
+|            25 |     1015 |        112 |        1 |     0.00 |     0.00 |
++---------------+----------+------------+----------+----------+----------+
+24 rows in set (0.00 sec)
+
+mysql> delete from orders where status='cancelled';
+Query OK, 1 row affected (0.01 sec)
+
+mysql> select * from orders;
++----------+-------------+------------+--------------+-----------+
+| order_id | customer_id | order_date | total_amount | status    |
++----------+-------------+------------+--------------+-----------+
+|     1001 |           1 | 2025-01-05 |     66500.00 | Delivered |
+|     1002 |           2 | 2025-01-12 |     25000.00 | Delivered |
+|     1003 |           3 | 2025-01-20 |      4999.00 | Shipped   |
+|     1004 |           1 | 2025-02-05 |      1500.00 | Delivered |
+|     1006 |           5 | 2025-02-20 |       799.00 | Delivered |
+|     1007 |           6 | 2025-03-01 |      4500.00 | Delivered |
+|     1008 |           3 | 2025-03-10 |      6500.00 | Shipped   |
+|     1009 |           7 | 2025-03-15 |      3500.00 | Delivered |
+|     1010 |           8 | 2025-04-02 |      1499.00 | Delivered |
+|     1011 |           9 | 2025-04-10 |       899.00 | Delivered |
+|     1012 |          10 | 2025-04-18 |      3700.00 | Shipped   |
+|     1013 |           2 | 2025-05-05 |     27000.00 | Delivered |
+|     1014 |           5 | 2025-05-15 |      2500.00 | Pending   |
+|     1015 |           1 | 2025-06-01 |      7700.00 | Delivered |
++----------+-------------+------------+--------------+-----------+
+14 rows in set (0.00 sec)
+
+mysql> create view customer_orders as (select * from customers c join orders o on c.customer_id=o.customer_id;
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near '' at line 1
+mysql> create view customer_orders as (select c.customer_id,c.name as cust_name,c.email,o.order_id,o.order_date,o.total_amount,o.status from customers c join orders o on c.customer_id=o.customer_id;
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near '' at line 1
+mysql> create view customer_orders as (select c.customer_id,c.name as cust_name,c.email,o.order_id,o.order_date,o.total_amount,o.status from customers c join orders o on c.customer_id=o.customer_id);
+Query OK, 0 rows affected (0.03 sec)
+
+mysql> select * from customers_orders;
+ERROR 1146 (42S02): Table '10k.customers_orders' doesn't exist
+mysql> select customer_name,order_id,total_amount,status from customers_orders;
+ERROR 1146 (42S02): Table '10k.customers_orders' doesn't exist
+mysql> select customer_name,order_id,total_amount,status from customer_orders;
+ERROR 1054 (42S22): Unknown column 'customer_name' in 'field list'
+mysql> select * from customer_orders;
++-------------+-----------+---------------------+----------+------------+--------------+-----------+
+| customer_id | cust_name | email               | order_id | order_date | total_amount | status    |
++-------------+-----------+---------------------+----------+------------+--------------+-----------+
+|           1 | Nandu     | new_nandu@gmail.com |     1001 | 2025-01-05 |     66500.00 | Delivered |
+|           1 | Nandu     | new_nandu@gmail.com |     1004 | 2025-02-05 |      1500.00 | Delivered |
+|           1 | Nandu     | new_nandu@gmail.com |     1015 | 2025-06-01 |      7700.00 | Delivered |
+|           2 | Rahul     | rahul@gmail.com     |     1002 | 2025-01-12 |     25000.00 | Delivered |
+|           2 | Rahul     | rahul@gmail.com     |     1013 | 2025-05-05 |     27000.00 | Delivered |
+|           3 | Priya     | priya@gmail.com     |     1003 | 2025-01-20 |      4999.00 | Shipped   |
+|           3 | Priya     | priya@gmail.com     |     1008 | 2025-03-10 |      6500.00 | Shipped   |
+|           5 | Sneha     | sneha@gmail.com     |     1006 | 2025-02-20 |       799.00 | Delivered |
+|           5 | Sneha     | sneha@gmail.com     |     1014 | 2025-05-15 |      2500.00 | Pending   |
+|           6 | Kiran     | kiran@gmail.com     |     1007 | 2025-03-01 |      4500.00 | Delivered |
+|           7 | Anjali    | anjali@gmail.com    |     1009 | 2025-03-15 |      3500.00 | Delivered |
+|           8 | Vijay     | vijay@gmail.com     |     1010 | 2025-04-02 |      1499.00 | Delivered |
+|           9 | Ravi      | ravi@gmail.com      |     1011 | 2025-04-10 |       899.00 | Delivered |
+|          10 | Divya     | divya@gmail.com     |     1012 | 2025-04-18 |      3700.00 | Shipped   |
++-------------+-----------+---------------------+----------+------------+--------------+-----------+
+14 rows in set (0.00 sec)
+
+mysql> create view product_categories as select * from products p join categories c on p.category_id=c.category_id;
+ERROR 1060 (42S21): Duplicate column name 'category_id'
+mysql> create view product_categories as select p.product_id,p.product_name,p.price,p.stock_quantity,p.category_id as product_category_id,p.added_date,c.category_name,c.description from products p join categories c on p.category_id=c.category_id;
+Query OK, 0 rows affected (0.01 sec)
+
+mysql> select * from product_categories;
++------------+--------------------+----------+----------------+---------------------+------------+-----------------+------------------------------------+
+| product_id | product_name       | price    | stock_quantity | product_category_id | added_date | category_name   | description                        |
++------------+--------------------+----------+----------------+---------------------+------------+-----------------+------------------------------------+
+|        101 | Laptop             | 60000.00 |             20 |                   1 | 2024-01-10 | Electronics     | Electronic devices and accessories |
+|        102 | Smartphone         | 25000.00 |             35 |                   1 | 2024-02-15 | Electronics     | Electronic devices and accessories |
+|        103 | Headphones         |  1500.00 |             50 |                   1 | 2024-03-20 | Electronics     | Electronic devices and accessories |
+|        104 | Smart Watch        |  3500.00 |             40 |                   1 | 2025-01-12 | Electronics     | Electronic devices and accessories |
+|        114 | Football           |  1200.00 |             35 |                   1 | 2025-01-20 | Electronics     | Electronic devices and accessories |
+|        105 | T-Shirt            |   799.00 |            100 |                   2 | 2024-04-05 | Clothing        | Men and women clothing             |
+|        106 | Jeans              |  1499.00 |             60 |                   2 | 2024-05-15 | Clothing        | Men and women clothing             |
+|        107 | Jacket             |  2999.00 |             30 |                   2 | 2025-02-10 | Clothing        | Men and women clothing             |
+|        108 | Microwave Oven     | 12000.00 |             15 |                   3 | 2024-06-01 | Home Appliances | Appliances for home use            |
+|        109 | Mixer Grinder      |  4500.00 |             25 |                   3 | 2024-07-10 | Home Appliances | Appliances for home use            |
+|        110 | Air Fryer          |  6500.00 |             18 |                   3 | 2025-03-05 | Home Appliances | Appliances for home use            |
+|        111 | Python Programming |   899.00 |             50 |                   4 | 2024-08-12 | Books           | Books and study materials          |
+|        112 | SQL Guide          |   699.00 |             45 |                   4 | 2024-09-18 | Books           | Books and study materials          |
+|        113 | Cricket Bat        |  3500.00 |             20 |                   5 | 2024-10-10 | Sports          | Sports equipment and accessories   |
+|        115 | Gym Dumbbells      |  2500.00 |             25 |                   5 | 2025-02-25 | Sports          | Sports equipment and accessories   |
++------------+--------------------+----------+----------------+---------------------+------------+-----------------+------------------------------------+
+15 rows in set (0.00 sec)
+
+mysql> create view order_item_details as select oi.order_item_id,oi.order_id,o.order_date,p.product_id,p.product_name,oi_quantity,oi_price,oi_subtotal from order_items oi join orders o on oi.order_id=o.order_id join products p on oi.product_id=p.product_id;
+ERROR 1054 (42S22): Unknown column 'oi_quantity' in 'field list'
+mysql> create view order_item_details as select oi.order_item_id,oi.order_id,o.order_date,p.product_id,p.product_name,oi.quantity,oi.price,oi.subtotal from order_items oi join orders o on oi.order_id=o.order_id join products p on oi.product_id=p.product_id;
+Query OK, 0 rows affected (0.01 sec)
+
+mysql> select * from order_item_details;
++---------------+----------+------------+------------+--------------------+----------+----------+----------+
+| order_item_id | order_id | order_date | product_id | product_name       | quantity | price    | subtotal |
++---------------+----------+------------+------------+--------------------+----------+----------+----------+
+|             1 |     1001 | 2025-01-05 |        101 | Laptop             |        1 | 65000.00 | 65000.00 |
+|             2 |     1001 | 2025-01-05 |        103 | Headphones         |        1 |  1500.00 |  1500.00 |
+|             3 |     1002 | 2025-01-12 |        102 | Smartphone         |        1 | 25000.00 | 25000.00 |
+|             4 |     1003 | 2025-01-20 |        106 | Jeans              |        1 |  1499.00 |  1499.00 |
+|             5 |     1003 | 2025-01-20 |        107 | Jacket             |        1 |  2999.00 |  2999.00 |
+|             6 |     1003 | 2025-01-20 |        105 | T-Shirt            |        1 |   501.00 |   501.00 |
+|             7 |     1004 | 2025-02-05 |        103 | Headphones         |        1 |  1500.00 |  1500.00 |
+|             9 |     1006 | 2025-02-20 |        105 | T-Shirt            |        1 |   799.00 |   799.00 |
+|            10 |     1007 | 2025-03-01 |        109 | Mixer Grinder      |        1 |  4500.00 |  4500.00 |
+|            11 |     1008 | 2025-03-10 |        110 | Air Fryer          |        1 |  6500.00 |  6500.00 |
+|            12 |     1009 | 2025-03-15 |        113 | Cricket Bat        |        1 |  3500.00 |  3500.00 |
+|            13 |     1010 | 2025-04-02 |        106 | Jeans              |        1 |  1499.00 |  1499.00 |
+|            14 |     1011 | 2025-04-10 |        111 | Python Programming |        1 |   899.00 |   899.00 |
+|            15 |     1012 | 2025-04-18 |        113 | Cricket Bat        |        1 |  3500.00 |  3500.00 |
+|            16 |     1012 | 2025-04-18 |        114 | Football           |        1 |  1200.00 |  1200.00 |
+|            17 |     1013 | 2025-05-05 |        102 | Smartphone         |        1 | 25000.00 | 25000.00 |
+|            18 |     1013 | 2025-05-05 |        103 | Headphones         |        1 |  1500.00 |  1500.00 |
+|            19 |     1013 | 2025-05-05 |        105 | T-Shirt            |        1 |   500.00 |   500.00 |
+|            20 |     1014 | 2025-05-15 |        115 | Gym Dumbbells      |        1 |  2500.00 |  2500.00 |
+|            21 |     1015 | 2025-06-01 |        104 | Smart Watch        |        1 |  3500.00 |  3500.00 |
+|            22 |     1015 | 2025-06-01 |        113 | Cricket Bat        |        1 |  3500.00 |  3500.00 |
+|            23 |     1015 | 2025-06-01 |        114 | Football           |        1 |   700.00 |   700.00 |
+|            24 |     1015 | 2025-06-01 |        111 | Python Programming |        1 |     0.00 |     0.00 |
+|            25 |     1015 | 2025-06-01 |        112 | SQL Guide          |        1 |     0.00 |     0.00 |
++---------------+----------+------------+------------+--------------------+----------+----------+----------+
+24 rows in set (0.00 sec)
+
+mysql> create view cust_total_spending as select c.customer_id,c.name as customer_name,sum(o.total_amount) as total_spending from customer c join orders o on c.customer_id=o.customer_id group by c.customer_id,c.name;
+ERROR 1146 (42S02): Table '10k.customer' doesn't exist
+mysql> create view cust_total_spending as select c.customer_id,c.name as customer_name,sum(o.total_amount) as total_spending from customers c join orders o on c.customer_id=o.customer_id group by c.customer_id,c.name;
+Query OK, 0 rows affected (0.01 sec)
+
+mysql> select 8 from cust_total_spending;
++---+
+| 8 |
++---+
+| 8 |
+| 8 |
+| 8 |
+| 8 |
+| 8 |
+| 8 |
+| 8 |
+| 8 |
+| 8 |
++---+
+9 rows in set (0.00 sec)
+
+mysql> select * from cust_total_spending;
++-------------+---------------+----------------+
+| customer_id | customer_name | total_spending |
++-------------+---------------+----------------+
+|           1 | Nandu         |       75700.00 |
+|           2 | Rahul         |       52000.00 |
+|           3 | Priya         |       11499.00 |
+|           5 | Sneha         |        3299.00 |
+|           6 | Kiran         |        4500.00 |
+|           7 | Anjali        |        3500.00 |
+|           8 | Vijay         |        1499.00 |
+|           9 | Ravi          |         899.00 |
+|          10 | Divya         |        3700.00 |
++-------------+---------------+----------------+
+9 rows in set (0.00 sec)
+
+mysql> create view best_selling_products as select p.product_id,p.product_name,sum(oi.quantity)as total_quantity_sold from products p join order_items oi on p.product_id=oi.product_id group by p.product_id,p.product_name;
+Query OK, 0 rows affected (0.01 sec)
+
+mysql> select from best_selling_products;
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'from best_selling_products' at line 1
+mysql> select * from best_selling_products;
++------------+--------------------+---------------------+
+| product_id | product_name       | total_quantity_sold |
++------------+--------------------+---------------------+
+|        101 | Laptop             |                   1 |
+|        102 | Smartphone         |                   2 |
+|        103 | Headphones         |                   3 |
+|        104 | Smart Watch        |                   1 |
+|        105 | T-Shirt            |                   3 |
+|        106 | Jeans              |                   2 |
+|        107 | Jacket             |                   1 |
+|        109 | Mixer Grinder      |                   1 |
+|        110 | Air Fryer          |                   1 |
+|        111 | Python Programming |                   2 |
+|        112 | SQL Guide          |                   1 |
+|        113 | Cricket Bat        |                   3 |
+|        114 | Football           |                   2 |
+|        115 | Gym Dumbbells      |                   1 |
++------------+--------------------+---------------------+
+14 rows in set (0.00 sec)
+
+mysql> select * from best_selling_products order by total_quantity_sold desc;
++------------+--------------------+---------------------+
+| product_id | product_name       | total_quantity_sold |
++------------+--------------------+---------------------+
+|        103 | Headphones         |                   3 |
+|        105 | T-Shirt            |                   3 |
+|        113 | Cricket Bat        |                   3 |
+|        102 | Smartphone         |                   2 |
+|        106 | Jeans              |                   2 |
+|        111 | Python Programming |                   2 |
+|        114 | Football           |                   2 |
+|        101 | Laptop             |                   1 |
+|        104 | Smart Watch        |                   1 |
+|        107 | Jacket             |                   1 |
+|        109 | Mixer Grinder      |                   1 |
+|        110 | Air Fryer          |                   1 |
+|        112 | SQL Guide          |                   1 |
+|        115 | Gym Dumbbells      |                   1 |
++------------+--------------------+---------------------+
+14 rows in set (0.00 sec)
+
+mysql> delimiter //
+mysql> create procedure add_customer(in p_name varchar(100),in p_email varchar(100),in p_phone varchar(15),in p_city varchar(255),in p_registration_date date)
+    -> begin
+    -> insert into customers (name,email,phone,city,registration_date) values(p_name,p_email,p_phone,p_city,p_registration_date);
+    -> end//
+Query OK, 0 rows affected (0.06 sec)
+
+mysql> delimiter;
+    -> CALL add_customer(
+    ->     'Karthik',
+    ->     'karthik@gmail.com',
+    ->     '9876543220',
+    ->     'Hyderabad',
+    ->     '2025-06-15'
+    -> );
+    -> ^C
+mysql> ^C
+mysql> CALL add_customer(
+    ->     'Karthik',
+    ->     'karthik@gmail.com',
+    ->     '9876543220',
+    ->     'Hyderabad',
+    ->     '2025-06-15'
+    -> );
+    -> SELECT *
+    -> FROM Customers;
+    -> delimiter;^C
+mysql> delimiter;
+    -> ^C
+mysql>
+mysql> CALL add_customer(
+    ->     'Karthik',
+    ->     'karthik@gmail.com',
+    ->     '9876543220',
+    ->     'Hyderabad',
+    ->     '2025-06-15'
+    -> );
+    -> delimiter;
+    -> ^C
+mysql> SELECT *
+    -> FROM Customers;
+    -> ^C
+mysql> DELIMITER //
+mysql>
+mysql> CREATE PROCEDURE add_customer(
+    ->     IN p_name VARCHAR(100),
+    ->     IN p_email VARCHAR(100),
+    ->     IN p_phone VARCHAR(15),
+    ->     IN p_city VARCHAR(255),
+    ->     IN p_registration_date DATE
+    -> )
+    -> BEGIN
+    ->     INSERT INTO Customers
+    ->     (name, email, phone, city, registration_date)
+    ->     VALUES
+    ->     (p_name, p_email, p_phone, p_city, p_registration_date);
+    -> END //
+ERROR 1304 (42000): PROCEDURE add_customer already exists
+mysql>
+mysql> DELIMITER ;
+mysql> CALL add_customer(
+    ->     'Karthik',
+    ->     'karthik@gmail.com',
+    ->     '9876543220',
+    ->     'Hyderabad',
+    ->     '2025-06-15'
+    -> );
+ERROR 1364 (HY000): Field 'customer_id' doesn't have a default value
+mysql> drop procedure add_customer;
+Query OK, 0 rows affected (0.02 sec)
+
+mysql> DELIMITER //
+mysql>
+mysql>
+mysql>
+mysql> CREATE PROCEDURE add_customer(
+    ->
+    -> in p_customer_id int,
+    ->
+    ->     IN p_name VARCHAR(100),
+    ->
+    ->     IN p_email VARCHAR(100),
+    ->
+    ->     IN p_phone VARCHAR(15),
+    ->
+    ->     IN p_city VARCHAR(255),
+    ->
+    ->     IN p_registration_date DATE
+    ->
+    -> )
+    ->
+    -> BEGIN
+    ->
+    ->     INSERT INTO Customers
+    ->
+    ->     (customer_id,name, email, phone, city, registration_date)
+    ->
+    ->     VALUES
+    ->
+    ->     (p_customer_id,p_name, p_email, p_phone, p_city, p_registration_date);
+    ->
+    -> END //
+Query OK, 0 rows affected (0.01 sec)
+
+mysql>
+mysql>
+mysql>
+mysql> DELIMITER ;
+mysql> CALL add_customer(1,
+    ->     'Karthik',
+    ->     'karthik@gmail.com',
+    ->     '9876543220',
+    ->     'Hyderabad',
+    ->     '2025-06-15'
+    -> );
+ERROR 1062 (23000): Duplicate entry '1' for key 'customers.PRIMARY'
+mysql> CALL add_customer(11,
+    ->     'Karthik',
+    ->     'karthik@gmail.com',
+    ->     '9876543220',
+    ->     'Hyderabad',
+    ->     '2025-06-15'
+    -> );
+Query OK, 1 row affected (0.01 sec)
+
+mysql> select * from customers;
++-------------+---------+---------------------+------------+-----------+-------------------+
+| customer_id | name    | email               | phone      | city      | registration_date |
++-------------+---------+---------------------+------------+-----------+-------------------+
+|           1 | Nandu   | new_nandu@gmail.com | 9876543210 | Hyderabad | 2024-01-15        |
+|           2 | Rahul   | rahul@gmail.com     | 9876543211 | Bangalore | 2024-02-10        |
+|           3 | Priya   | priya@gmail.com     | 9876543212 | Hyderabad | 2024-03-05        |
+|           4 | Arjun   | arjun@gmail.com     | 9876543213 | Chennai   | 2024-04-12        |
+|           5 | Sneha   | sneha@gmail.com     | 9876543214 | Mumbai    | 2024-05-20        |
+|           6 | Kiran   | kiran@gmail.com     | 9876543215 | Hyderabad | 2024-06-18        |
+|           7 | Anjali  | anjali@gmail.com    | 9876543216 | Pune      | 2024-07-25        |
+|           8 | Vijay   | vijay@gmail.com     | 9876543217 | Delhi     | 2024-08-14        |
+|           9 | Ravi    | ravi@gmail.com      | 9876543218 | Hyderabad | 2024-09-10        |
+|          10 | Divya   | divya@gmail.com     | 9876543219 | Bangalore | 2024-10-05        |
+|          11 | Karthik | karthik@gmail.com   | 9876543220 | Hyderabad | 2025-06-15        |
++-------------+---------+---------------------+------------+-----------+-------------------+
+11 rows in set (0.00 sec)
+
+mysql> DELIMITER //
+mysql>
+mysql> CREATE PROCEDURE update_product_price(
+    ->     IN p_product_id INT,
+    ->     IN p_new_price DECIMAL(10,2)
+    -> )
+    -> BEGIN
+    ->     UPDATE Products
+    ->     SET price = p_new_price
+    ->     WHERE product_id = p_product_id;
+    -> END //
+Query OK, 0 rows affected (0.01 sec)
+
+mysql>
+mysql> DELIMITER ;
+mysql> CALL update_product_price(101, 60000);
+Query OK, 0 rows affected (0.01 sec)
+
+mysql> SELECT *
+    -> FROM Products
+    -> WHERE product_id = 101;
++------------+--------------+----------+----------------+-------------+------------+
+| product_id | product_name | price    | stock_quantity | category_id | added_date |
++------------+--------------+----------+----------------+-------------+------------+
+|        101 | Laptop       | 60000.00 |             20 |           1 | 2024-01-10 |
++------------+--------------+----------+----------------+-------------+------------+
+1 row in set (0.00 sec)
+
+mysql> DELIMITER //
+mysql>
+mysql> CREATE PROCEDURE customer_orders(
+    ->     IN p_customer_id INT
+    -> )
+    -> BEGIN
+    ->     SELECT
+    ->         order_id,
+    ->         customer_id,
+    ->         order_date,
+    ->         total_amount,
+    ->         status
+    ->     FROM Orders
+    ->     WHERE customer_id = p_customer_id;
+    -> END //
+Query OK, 0 rows affected (0.01 sec)
+
+mysql>
+mysql> DELIMITER ;
+mysql> CALL customer_orders(1);
++----------+-------------+------------+--------------+-----------+
+| order_id | customer_id | order_date | total_amount | status    |
++----------+-------------+------------+--------------+-----------+
+|     1001 |           1 | 2025-01-05 |     66500.00 | Delivered |
+|     1004 |           1 | 2025-02-05 |      1500.00 | Delivered |
+|     1015 |           1 | 2025-06-01 |      7700.00 | Delivered |
++----------+-------------+------------+--------------+-----------+
+3 rows in set (0.01 sec)
+
+Query OK, 0 rows affected (0.01 sec)
+
+mysql> DELIMITER //
+mysql>
+mysql> CREATE PROCEDURE total_sales()
+    -> BEGIN
+    ->     SELECT SUM(total_amount) AS total_sales
+    ->     FROM Orders;
+    -> END //
+Query OK, 0 rows affected (0.01 sec)
+
+mysql>
+mysql> DELIMITER ;
+mysql> CALL total_sales();
++-------------+
+| total_sales |
++-------------+
+|   156596.00 |
++-------------+
+1 row in set (0.00 sec)
+
+Query OK, 0 rows affected (0.00 sec)
+
+mysql> DELIMITER //
+mysql>
+mysql> CREATE PROCEDURE products_by_category(
+    ->     IN p_category_id INT
+    -> )
+    -> BEGIN
+    ->     SELECT
+    ->         product_id,
+    ->         product_name,
+    ->         price,
+    ->         stock_quantity,
+    ->         category_id,
+    ->         added_date
+    ->     FROM Products
+    ->     WHERE category_id = p_category_id;
+    -> END //
+Query OK, 0 rows affected (0.01 sec)
+
+mysql>
+mysql> DELIMITER ;
+mysql> CALL products_by_category(1);
++------------+--------------+----------+----------------+-------------+------------+
+| product_id | product_name | price    | stock_quantity | category_id | added_date |
++------------+--------------+----------+----------------+-------------+------------+
+|        101 | Laptop       | 60000.00 |             20 |           1 | 2024-01-10 |
+|        102 | Smartphone   | 25000.00 |             35 |           1 | 2024-02-15 |
+|        103 | Headphones   |  1500.00 |             50 |           1 | 2024-03-20 |
+|        104 | Smart Watch  |  3500.00 |             40 |           1 | 2025-01-12 |
+|        114 | Football     |  1200.00 |             35 |           1 | 2025-01-20 |
++------------+--------------+----------+----------------+-------------+------------+
+5 rows in set (0.00 sec)
+
+Query OK, 0 rows affected (0.02 sec)
+
+mysql> SELECT
+    ->     p.product_id,
+    ->     p.product_name,
+    ->     SUM(oi.quantity) AS total_quantity_sold
+    -> FROM Products p
+    -> JOIN Order_Items oi
+    ->     ON p.product_id = oi.product_id
+    -> GROUP BY p.product_id, p.product_name
+    -> ORDER BY total_quantity_sold DESC
+    -> LIMIT 5;
++------------+--------------+---------------------+
+| product_id | product_name | total_quantity_sold |
++------------+--------------+---------------------+
+|        113 | Cricket Bat  |                   3 |
+|        103 | Headphones   |                   3 |
+|        105 | T-Shirt      |                   3 |
+|        102 | Smartphone   |                   2 |
+|        106 | Jeans        |                   2 |
++------------+--------------+---------------------+
+5 rows in set (0.00 sec)
+
+mysql> SELECT
+    ->     c.customer_id,
+    ->     c.name,
+    ->     COUNT(o.order_id) AS total_orders
+    -> FROM Customers c
+    -> JOIN Orders o
+    ->     ON c.customer_id = o.customer_id
+    -> GROUP BY c.customer_id, c.name
+    -> ORDER BY total_orders DESC;
++-------------+--------+--------------+
+| customer_id | name   | total_orders |
++-------------+--------+--------------+
+|           1 | Nandu  |            3 |
+|           2 | Rahul  |            2 |
+|           3 | Priya  |            2 |
+|           5 | Sneha  |            2 |
+|           6 | Kiran  |            1 |
+|           7 | Anjali |            1 |
+|           8 | Vijay  |            1 |
+|           9 | Ravi   |            1 |
+|          10 | Divya  |            1 |
++-------------+--------+--------------+
+9 rows in set (0.00 sec)
+
+mysql> SELECT
+    ->     YEAR(order_date) AS year,
+    ->     MONTH(order_date) AS month,
+    ->     SUM(total_amount) AS monthly_sales
+    -> FROM Orders
+    -> WHERE status <> 'Cancelled'
+    -> GROUP BY YEAR(order_date), MONTH(order_date)
+    -> ORDER BY year, month;
++------+-------+---------------+
+| year | month | monthly_sales |
++------+-------+---------------+
+| 2025 |     1 |      96499.00 |
+| 2025 |     2 |       2299.00 |
+| 2025 |     3 |      14500.00 |
+| 2025 |     4 |       6098.00 |
+| 2025 |     5 |      29500.00 |
+| 2025 |     6 |       7700.00 |
++------+-------+---------------+
+6 rows in set (0.01 sec)
+
+mysql> SELECT
+    ->     c.category_id,
+    ->     c.category_name,
+    ->     SUM(oi.subtotal) AS total_revenue
+    -> FROM Categories c
+    -> JOIN Products p
+    ->     ON c.category_id = p.category_id
+    -> JOIN Order_Items oi
+    ->     ON p.product_id = oi.product_id
+    -> JOIN Orders o
+    ->     ON oi.order_id = o.order_id
+    -> WHERE o.status <> 'Cancelled'
+    -> GROUP BY c.category_id, c.category_name
+    -> ORDER BY total_revenue DESC
+    -> LIMIT 1;
++-------------+---------------+---------------+
+| category_id | category_name | total_revenue |
++-------------+---------------+---------------+
+|           1 | Electronics   |     124900.00 |
++-------------+---------------+---------------+
+1 row in set (0.00 sec)
+
+mysql> SELECT
+    ->     c.customer_id,
+    ->     c.name,
+    ->     SUM(o.total_amount) AS total_spending
+    -> FROM Customers c
+    -> JOIN Orders o
+    ->     ON c.customer_id = o.customer_id
+    -> WHERE o.status <> 'Cancelled'
+    -> GROUP BY c.customer_id, c.name
+    -> ORDER BY total_spending DESC;
++-------------+--------+----------------+
+| customer_id | name   | total_spending |
++-------------+--------+----------------+
+|           1 | Nandu  |       75700.00 |
+|           2 | Rahul  |       52000.00 |
+|           3 | Priya  |       11499.00 |
+|           6 | Kiran  |        4500.00 |
+|          10 | Divya  |        3700.00 |
+|           7 | Anjali |        3500.00 |
+|           5 | Sneha  |        3299.00 |
+|           8 | Vijay  |        1499.00 |
+|           9 | Ravi   |         899.00 |
++-------------+--------+----------------+
+9 rows in set (0.01 sec)
+
+mysql>
+
